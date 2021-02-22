@@ -95,8 +95,9 @@ app.use(function (err, req, res, next) {
     }
 });
 
-const port =  process.env.PORT || 8070
- app.listen(port, () => {
+
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
     console.log(`A Node Js API is listening on port: ${port}`);
 //     console.log("before io.on")
 //  const server = require('http').Server(app);
@@ -151,6 +152,7 @@ const port =  process.env.PORT || 8070
 //   })
 
 });
+
 //const http = require('http').Server(app);
 //const io = require('socket.io')(server);
 
@@ -160,4 +162,6 @@ const port =  process.env.PORT || 8070
 //       credentials: true
 //     }
 //   })
+
+
 
