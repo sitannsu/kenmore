@@ -20,10 +20,10 @@ const userSchema = new mongoose.Schema({
     //     type: String,
     //     required: true
     // },
-    // playerId: {
-    //     type: String,
-    //     required: true
-    // },
+    playerId: {
+        type: String,
+       // required: true
+    },
     hashed_password: {
         type: String,
         required: true
@@ -67,16 +67,18 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "subscriber"
     },
-    bankAccountNumber: {
-        type: String
-    },
-    bankAccountProof: {
-        type: String
-    },
-
+  
     addressProof: {
         type: String
-    }
+    },
+    visitedUsers:[ { userId:String , visitedTime:{ type: Date, default: Date.now } } ],
+    testimonialUser: [
+        {
+            description:String,
+            userId:String,
+            createdTime: { type: Date, default: Date.now }
+        }
+    ]
 
 });
 

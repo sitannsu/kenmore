@@ -271,33 +271,33 @@ exports.comment = (req, res) => {
         });
 };
 
-// exports.likeComment = (req, res) => {
-//     console.log("body", req.body)
-//     Post.findById(req.body.postId, (error, requiredPost)=>{
-//      let likeObjectIndex = requiredPost? requiredPost.comments[2].likes.findIndex(item => {
-//     return item.userId === req.body.userId
-//      }):-1;
+exports.likeComment = (req, res) => {
+    console.log("body", req.body)
+    Post.findById(req.body.postId, (error, requiredPost)=>{
+     let likeObjectIndex = requiredPost? requiredPost.comments[0].likes.findIndex(item => {
+    return item.userId === req.body.userId
+     }):-1;
    
-//     if(likeObjectIndex>-1){
-//         likeObject= {...requiredPost.comments[2].likes[likeObjectIndex], userId:req.body.userId , count:requiredPost.comments[2].likes[likeObjectIndex].count + 1}
-//         requiredPost.comments[2].likes[likeObjectIndex] = likeObject
-//     }
-//     else {
-//         likeObject = {userId:req.body.userId, count:1}
-//         requiredPost.comments[2].likes.push(likeObject)
-//     }
-//     requiredPost.save()
-//       if (error) {
-//         console.log("err", error)
-//         return res.status(400).json({
-//        error: error
+    if(likeObjectIndex>-1){
+        likeObject= {...requiredPost.comments[0].likes[likeObjectIndex], userId:req.body.userId , count:requiredPost.comments[0].likes[likeObjectIndex].count + 1}
+        requiredPost.comments[0].likes[likeObjectIndex] = likeObject
+    }
+    else {
+        likeObject = {userId:req.body.userId, count:1}
+        requiredPost.comments[0].likes.push(likeObject)
+    }
+    requiredPost.save()
+      if (error) {
+        console.log("err", error)
+        return res.status(400).json({
+       error: error
            
-//         });
-//     } else {
-//         res.json(requiredPost);
-//     }
-// })
-// };
+        });
+    } else {
+        res.json(requiredPost);
+    }
+})
+};
 
 
 exports.uncomment = (req, res) => {

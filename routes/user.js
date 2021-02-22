@@ -11,6 +11,9 @@ const {
     removeFollowing,
     removeFollower,
     findPeople,
+    visitedUsers,
+    allVisitedUsers,
+    testimonialUser,
     hasAuthorization
 } = require("../controllers/user");
 const { requireSignin } = require("../controllers/auth");
@@ -27,6 +30,13 @@ router.post("/user/:userId", updateUser);
 router.delete("/user/:userId", deleteUser);
 // photo
 router.get("/user/photo/:userId", userPhoto);
+
+// Visited Users
+router.put("/user/visitprofile/:userId", visitedUsers);
+router.get("/user/allvisitedusers/:userId",  allVisitedUsers);
+
+// Testimonial
+router.put("/user/:userId", testimonialUser);
 
 // who to follow
 router.get("/user/findpeople/:userId", requireSignin, findPeople);

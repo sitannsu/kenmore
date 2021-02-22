@@ -5,8 +5,26 @@ const morgan = require('morgan');
 const expressValidator = require('express-validator');
 const bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
+const cors = require('cors');
 const dotenv = require('dotenv');
+//var http = require('http').Server(app);
+//var io = require('socket.io')(http);
 dotenv.config();
+
+
+//  Socket Connection
+
+// const ClientManager = require('./chat/clientManager')
+// const ChatroomManager = require('./chat/chatroomManager')
+// const makeHandlers = require('./chat/handler')
+
+// const clientManager = ClientManager()
+// const chatroomManager = ChatroomManager()
+
+
+// io.on('connection', () =>{
+//     console.log('a user is connected')
+//    })
 
 // db
 // mongodb://kaloraat:dhungel8@ds257054.mlab.com:57054/nodeapi
@@ -16,7 +34,8 @@ dotenv.config();
 mongoose
     .connect(process.env.MONGO_URI, {
         useNewUrlParser: true,
-        useCreateIndex: true
+        useCreateIndex: true,
+        useUnifiedTopology: true 
     })
     .then(() => console.log('DB Connected'));
 
@@ -28,7 +47,9 @@ mongoose.connection.on('error', err => {
 const postRoutes = require('./routes/post');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
-//const friendRoutes = require('./routes/friend');
+const pushNotifi = require("./routes/pushNotification")
+const friendRoutes = require('./routes/friend');
+//const chatRoutes = require('./routes/chat');
 //const notificationRoutes = require('./routes/pushNotification')
 //const notifiRoutes = require('./routes/notification');
 //const userAddClick = require('./routes/userAddClick');
@@ -49,13 +70,24 @@ const userRoutes = require('./routes/user');
 // middleware -
 app.use(morgan('dev'));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}))
 app.use(cookieParser());
 app.use(expressValidator());
-//app.use(cors());
+app.use(cors());
+// midd
+// app.use(function(request, response, next) {
+//     response.header("Access-Control-Allow-Origin", "*");
+//     response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+//   });
+
 app.use('/api', postRoutes);
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
-//app.use('/api', postRoutes);
+app.use('/api', pushNotifi);
+app.use('/api', friendRoutes);
+//app.use('/api', chatRoutes);
+
 
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
@@ -63,8 +95,69 @@ app.use(function (err, req, res, next) {
     }
 });
 
-const port = process.env.PORT || 8070;
-app.listen(port, () => {
+const port =  process.env.PORT || 8070
+ app.listen(port, () => {
     console.log(`A Node Js API is listening on port: ${port}`);
+//     console.log("before io.on")
+//  const server = require('http').Server(app);
+//const io = require('socket.io')(server);
+// const io = require('socket.io')(server, {
+//     cors: {
+//       origin: "http://localhost:3001",
+//       credentials: true
+//     }
+//   })
+
+// io.on('connection', function (client) {
+//     console.log("after io.on")
+//     const {
+//       handleRegister,
+//       handleJoin,
+//       handleLeave,
+//       handleMessage,
+//       handleGetChatrooms,
+//       handleGetAvailableUsers,
+//       handleDisconnect
+//     } = makeHandlers(client, clientManager, chatroomManager)
+  
+//     console.log('client connected...', client.id)
+//     clientManager.addClient(client)
+  
+//     client.on('register', handleRegister)
+  
+//     client.on('join', handleJoin)
+  
+//     client.on('leave', handleLeave)
+  
+//     client.on('message', handleMessage)
+  
+//     client.on('chatrooms', handleGetChatrooms)
+  
+//     client.on('availableUsers', handleGetAvailableUsers)
+  
+//     client.on('disconnect', function () {
+//       console.log('client disconnect...', client.id)
+//       handleDisconnect()
+//     })
+  
+//     client.on('error', function (err) {
+//       console.log('received error from client:', client.id)
+//       console.log(err)
+//     })
+  
+//   })
+//   io.on('error', function(error) {
+//       console.log(error)
+//   })
+
 });
+//const http = require('http').Server(app);
+//const io = require('socket.io')(server);
+
+// const io = require('socket.io')(server, {
+//     cors: {
+//       origin: "http://localhost:3001",
+//       credentials: true
+//     }
+//   })
 

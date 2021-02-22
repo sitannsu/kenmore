@@ -30,7 +30,7 @@ router.put('/post/like', requireSignin, like);
 
 // comments
 router.put('/post/comment', requireSignin, comment);
-// router.put('/post/comment/like', requireSignin, likeComment);
+router.put('/post/comment/like', requireSignin, likeComment);
 router.put('/post/uncomment', requireSignin, uncomment);
 router.put('/post/updatecomment', requireSignin, updateComment);
 

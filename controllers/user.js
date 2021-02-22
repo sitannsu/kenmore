@@ -105,9 +105,67 @@ exports.updateUser = (req, res) => {
         // console.log("user after update with formdata: ", user);
         res.json(user);
     });
-    //});
-
 };
+ 
+ // Visited Users
+exports.visitedUsers = (req, res) => {
+    let user = req.profile;
+    User.findOne({ _id:user._id }, (err, user) => {
+        // if err or no user
+        if (err || !user){
+            return res.status('401').json({
+                error: 'User with that id does not exist!'
+            });
+        }
+        user.visitedUsers.push({userId:req.body.visitedUserId, visitedTime:req.body.userVisitedTime})
+        user.save((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            res.json(user);
+        });
+    });
+
+    };
+
+exports.allVisitedUsers = (req, res) => {
+    let user = req.profile;
+    User.findOne({ _id:user._id }, (err, user) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            });
+        }
+        res.json(user);
+    })
+    .select('visitedUsers.userId visitedUsers.visitedTime')
+   
+};
+
+// Testimonial User
+exports.testimonialUser = (req, res) => {
+    let user = req.profile;
+    User.findOne({ _id:user._id }, (err, user) => {
+        // if err or no user
+        if (err || !user){
+            return res.status('401').json({
+                error: 'User with that id does not exist!'
+            });
+        }
+        user.testimonialUser.push({userId:req.body.testimonialUserId, description:req.body.text, createdTime:req.body.createdAt})
+        user.save((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            res.json(user);
+        });
+    });
+
+    };
 
 exports.userPhoto = (req, res, next) => {
     if (req.profile.photo.data) {

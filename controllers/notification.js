@@ -14,6 +14,7 @@ exports.allNotifications = async (req, res) => {
     });
      
 };
+
 exports.getAllNotifications = async (req, res, userId) => {
     Notification.find({currentUserId:userId})
         .populate('user', '_id name profileImageUrl')
