@@ -51,7 +51,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const pushNotifi = require("./routes/pushNotification")
 const friendRoutes = require('./routes/friend');
-//const chatRoutes = require('./routes/chat');
+const chatRoutes = require('./routes/chat');
 //const notificationRoutes = require('./routes/pushNotification')
 //const notifiRoutes = require('./routes/notification');
 //const userAddClick = require('./routes/userAddClick');
@@ -72,7 +72,7 @@ const friendRoutes = require('./routes/friend');
 // middleware -
 app.use(morgan('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({extended: true}))
 app.use(cookieParser());
 app.use(expressValidator());
 app.use(cors());
@@ -88,7 +88,7 @@ app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', pushNotifi);
 app.use('/api', friendRoutes);
-//app.use('/api', chatRoutes);
+app.use('/api', chatRoutes);
 
 
 // app.use(function (err, req, res, next) {
@@ -102,8 +102,7 @@ const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(`A Node Js API is listening on port: ${port}`);
 })
-
-//     console.log("before io.on")
+//      console.log("before io.on")
 //  const server = require('http').Server(app);
 // //const io = require('socket.io')(server);
 // const io = require('socket.io')(server, {
@@ -156,6 +155,7 @@ app.listen(port, () => {
 //   })
 
 // });
+
 
 // const http = require('http').Server(app);
 // const io = require('socket.io')(server);
