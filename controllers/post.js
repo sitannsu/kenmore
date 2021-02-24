@@ -254,7 +254,7 @@ exports.unlike = (req, res) => {
 };
 
 exports.comment = (req, res) => {
-    let comment = req.body.comment;
+    let comment = {text:req.body.comment};
     comment.postedBy = req.body.userId;
 
     Post.findByIdAndUpdate(req.body.postId, { $push: { comments: comment } }, { new: true })

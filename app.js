@@ -1,3 +1,5 @@
+
+
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -89,19 +91,21 @@ app.use('/api', friendRoutes);
 //app.use('/api', chatRoutes);
 
 
-app.use(function (err, req, res, next) {
-    if (err.name === 'UnauthorizedError') {
-        res.status(401).json({ error: 'Unauthorized!' });
-    }
-});
+// app.use(function (err, req, res, next) {
+//     if (err.name === 'UnauthorizedError') {
+//         res.status(401).json({ error: 'Unauthorized!' });
+//     }
+// });
 
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(`A Node Js API is listening on port: ${port}`);
+})
+
 //     console.log("before io.on")
 //  const server = require('http').Server(app);
-//const io = require('socket.io')(server);
+// //const io = require('socket.io')(server);
 // const io = require('socket.io')(server, {
 //     cors: {
 //       origin: "http://localhost:3001",
@@ -151,10 +155,10 @@ app.listen(port, () => {
 //       console.log(error)
 //   })
 
-});
+// });
 
-//const http = require('http').Server(app);
-//const io = require('socket.io')(server);
+// const http = require('http').Server(app);
+// const io = require('socket.io')(server);
 
 // const io = require('socket.io')(server, {
 //     cors: {

@@ -36,7 +36,7 @@ router.put("/user/visitprofile/:userId", visitedUsers);
 router.get("/user/allvisitedusers/:userId",  allVisitedUsers);
 
 // Testimonial
-router.put("/user/:userId", testimonialUser);
+router.put("/testimonialUser/:userId", testimonialUser);
 
 // who to follow
 router.get("/user/findpeople/:userId", requireSignin, findPeople);

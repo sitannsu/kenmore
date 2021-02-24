@@ -13,7 +13,6 @@ exports.requestFriend =  (req, res) => {
             });
         }
             const receiver = await User.findOne({ _id:  req.body.receiverUserId });
-            console.log("Receiver", receiverUserId)
                 const sender = await User.findOne({ _id: req.body.senderUserId });
                 console.log("api invoked");
                 var message = {
