@@ -2,6 +2,7 @@ const _ = require('lodash');
 const User = require('../models/user');
 const formidable = require('formidable');
 const fs = require('fs');
+const { uploadFileTos3 } = require('./videoupload');
 
 exports.userById = (req, res, next, id) => {
     User.findById(id)
@@ -70,11 +71,50 @@ exports.getUser = (req, res) => {
 //     });
 // };
 
-exports.updateUser = (req, res) => {
-    console.log("API startted")
+
+
+// exports.createPost = async (req, res, next) => {
+//     try{
+//         console.log("reqqq", req.file);
+//     // let form = new formidable.IncomingForm();
+//     // form.keepExtensions = true;
+//     console.log("requset", req);
+
+//         let post = new Post(req.body);
+
+//         req.profile.hashed_password = undefined;
+//         req.profile.salt = undefined;
+//         post.postedBy = req.profile;
+
+//         if (req.file) {
+//             // post.photo.data = fs.readFileSync(files.photo.path);
+//             // post.photo.contentType = files.photo.type;
+          
+//                  imageUrl =  await uploadFileTos3('images',req.file)
+//                  console.log("imageurl", imageUrl);
+//                  post.photo= imageUrl.url;
+                              
+//         }
+//         post.save((err, result) => {
+//             if (err) {
+//                 return res.status(400).json({
+//                     error: err
+//                 });
+//             }
+//             res.json(result);
+//         });
+// }
+// catch(error) {
+//     console.log("errror",error)
+// }
+// };
+
+exports.updateUser = async (req, res) => {
+    console.log("API startted");
+    //console.log("reqq", req.file);
     //let form = new formidable.IncomingForm();
-    // console.log("incoming form data: ", form);
-    //form.keepExtensions = true;
+   // console.log("incoming form data: ", form);
+  //  form.keepExtensions = true;
     // form.parse(req, (err, fields, files) => {
     // if (err) {
     //     return res.status(400).json({
@@ -87,12 +127,16 @@ exports.updateUser = (req, res) => {
     user = _.extend(user, req.body);
     console.log("API extended" + user)
     user.updated = Date.now();
-    // console.log("USER FORM DATA UPDATE: ", user);
+     console.log("USER FORM DATA UPDATE: ", user);
 
-    // if (files.photo) {
-    //     user.photo.data = fs.readFileSync(files.photo.path);
-    //     user.photo.contentType = files.photo.type;
-    // }
+    if (req.file) {
+        imageUrl =  await uploadFileTos3('images',req.file)
+        console.log("imageurl", imageUrl);
+        user.photo= imageUrl.url;
+       // user.profileImageUrl= imageUrl.url;
+        // user.photo.data = fs.readFileSync(files.photo.path);
+        // user.photo.contentType = files.photo.type;
+    }
 
     user.save((err, result) => {
         if (err) {
@@ -105,8 +149,8 @@ exports.updateUser = (req, res) => {
         // console.log("user after update with formdata: ", user);
         res.json(user);
     });
-};
- 
+}
+
  // Visited Users
 exports.visitedUsers = (req, res) => {
     let user = req.profile;
@@ -168,12 +212,15 @@ exports.testimonialUser = (req, res) => {
     };
 
 exports.userPhoto = (req, res, next) => {
+    console.log("reqqq", req.file);
     if (req.profile.photo.data) {
         res.set(('Content-Type', req.profile.photo.contentType));
         return res.send(req.profile.photo.data);
     }
     next();
 };
+
+
 
 exports.deleteUser = (req, res, next) => {
     let user = req.profile;

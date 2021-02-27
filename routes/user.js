@@ -17,6 +17,9 @@ const {
     hasAuthorization
 } = require("../controllers/user");
 const { requireSignin } = require("../controllers/auth");
+const multer = require('multer')
+const inMemoryStorage = multer.memoryStorage();
+const singleFileUpload = multer({ storage: inMemoryStorage });
 
 const router = express.Router();
 
@@ -26,7 +29,8 @@ router.put("/user/unfollow", removeFollowing, removeFollower);
 router.get("/users", allUsers);
 router.get("/user/:userId", requireSignin, getUser);
 //router.post("/user/:userId", requireSignin, hasAuthorization, updateUser);
-router.post("/user/:userId", updateUser);
+router.post("/user/:userId", singleFileUpload.single('photo'),  updateUser);
+//router.post("/user/:userId", singleFileUpload.single('profileImageUrl'),  updateUser);
 router.delete("/user/:userId", deleteUser);
 // photo
 router.get("/user/photo/:userId", userPhoto);
