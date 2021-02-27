@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const fs = require('fs');
 //var http = require('http').Server(app);
 //var io = require('socket.io')(http);
 dotenv.config();
@@ -52,27 +53,28 @@ const userRoutes = require('./routes/user');
 const pushNotifi = require("./routes/pushNotification")
 const friendRoutes = require('./routes/friend');
 const chatRoutes = require('./routes/chat');
+const videoRoutes = require('./routes/videoupload')
 //const notificationRoutes = require('./routes/pushNotification')
 //const notifiRoutes = require('./routes/notification');
 //const userAddClick = require('./routes/userAddClick');
 
 // // apiDocs
-// app.get('/api', (req, res) => {
-//     fs.readFile('docs/apiDocs.json', (err, data) => {
-//         if (err) {
-//             res.status(400).json({
-//                 error: err
-//             });
-//         }
-//         const docs = JSON.parse(data);
-//         res.json(docs);
-//     });
-// });
+app.get('/api', (req, res) => {
+    fs.readFile('docs/apiDocs.json', (err, data) => {
+        if (err) {
+            res.status(400).json({
+                error: err
+            });
+        }
+        const docs = JSON.parse(data);
+        res.json(docs);
+    });
+});
 
 // middleware -
 app.use(morgan('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}))
+//app.use(bodyParser.urlencoded({extended: true}))
 app.use(cookieParser());
 app.use(expressValidator());
 app.use(cors());
@@ -89,6 +91,7 @@ app.use('/api', userRoutes);
 app.use('/api', pushNotifi);
 app.use('/api', friendRoutes);
 app.use('/api', chatRoutes);
+app.use('/api', videoRoutes);
 
 
 // app.use(function (err, req, res, next) {

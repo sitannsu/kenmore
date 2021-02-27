@@ -2,6 +2,7 @@ const Post = require('../models/post');
 const formidable = require('formidable');
 const fs = require('fs');
 const _ = require('lodash');
+const { uploadFileTos3 } = require('./videoupload');
 
 exports.postById = (req, res, next, id) => {
     Post.findById(id)
@@ -63,25 +64,27 @@ exports.getPosts = async (req, res) => {
         .catch(err => console.log(err));
 };
 
-exports.createPost = (req, res, next) => {
+exports.createPost = async (req, res, next) => {
     try{
-    let form = new formidable.IncomingForm();
-    form.keepExtensions = true;
-    form.parse(req, (err, fields, files) => {
-        if (err) {
-            return res.status(400).json({
-                error: 'Image could not be uploaded'
-            });
-        }
-        let post = new Post(fields);
+        console.log("reqqq", req.file);
+    // let form = new formidable.IncomingForm();
+    // form.keepExtensions = true;
+    console.log("requset", req);
+
+        let post = new Post(req.body);
 
         req.profile.hashed_password = undefined;
         req.profile.salt = undefined;
         post.postedBy = req.profile;
 
-        if (files.photo) {
-            post.photo.data = fs.readFileSync(files.photo.path);
-            post.photo.contentType = files.photo.type;
+        if (req.file) {
+            // post.photo.data = fs.readFileSync(files.photo.path);
+            // post.photo.contentType = files.photo.type;
+          
+                 imageUrl =  await uploadFileTos3('images',req.file)
+                 console.log("imageurl", imageUrl);
+                 post.photo= imageUrl.url;
+                              
         }
         post.save((err, result) => {
             if (err) {
@@ -91,7 +94,6 @@ exports.createPost = (req, res, next) => {
             }
             res.json(result);
         });
-    });
 }
 catch(error) {
     console.log("errror",error)
@@ -203,7 +205,7 @@ exports.like = (req, res) => {
      let likeObjectIndex = requiredPost? requiredPost.likes.findIndex(item => {
     return item.userId === req.body.userId
      }):-1;
-   
+
     if(likeObjectIndex>-1){
         likeObject= {...requiredPost.likes[likeObjectIndex], userId:req.body.userId , count:requiredPost.likes[likeObjectIndex].count + 1}
         requiredPost.likes[likeObjectIndex] = likeObject
@@ -230,13 +232,13 @@ exports.like = (req, res) => {
         console.log("err", error)
         return res.status(400).json({
        error: error
-           
+
         });
     } else {
         res.json(requiredPost);
     }
  })
-   
+
 };
 
 exports.unlike = (req, res) => {
@@ -277,7 +279,7 @@ exports.likeComment = (req, res) => {
      let likeObjectIndex = requiredPost? requiredPost.comments[0].likes.findIndex(item => {
     return item.userId === req.body.userId
      }):-1;
-   
+
     if(likeObjectIndex>-1){
         likeObject= {...requiredPost.comments[0].likes[likeObjectIndex], userId:req.body.userId , count:requiredPost.comments[0].likes[likeObjectIndex].count + 1}
         requiredPost.comments[0].likes[likeObjectIndex] = likeObject
@@ -291,7 +293,7 @@ exports.likeComment = (req, res) => {
         console.log("err", error)
         return res.status(400).json({
        error: error
-           
+
         });
     } else {
         res.json(requiredPost);
@@ -377,14 +379,14 @@ exports.updateComment = (req, res) => {
 exports.updateComment = async (req, res) => {
   const commentId = req.body.id;
   const comment = req.body.comment;
- 
+
   const updatedComment = await Post.updateOne(
     { comments: { $elemMatch: { _id: commentId } } },
     { $set: { "comments.$.text": comment } }
   );
   if (!updatedComment)
     res.status(404).json({ message: Language.fa.NoPostFound });
- 
+
   res.json(updatedComment);
 };
 
@@ -393,23 +395,23 @@ exports.updateComment = async (req, res) => {
   const commentId = req.body.id;
   const comment = req.body.comment;
   const postId = req.params.id;
- 
+
   const post = await Post.findById(postId);
   const com = post.comments.map(comment => comment.id).indexOf(commentId);
   const singleComment = post.comments.splice(com, 1);
   let authorized = singleComment[0].commentedBy;
   console.log("Security Check Passed ?", req.auth._id == authorized);
- 
+
   if (authorized != req.auth._id)
     res.status(401).json({ mesage: Language.fa.UnAuthorized });
- 
+
   const updatedComment = await Post.updateOne(
     { comments: { $elemMatch: { _id: commentId } } },
     { $set: { "comments.$.text": comment } }
   );
   if (!updatedComment)
     res.status(404).json({ message: Language.fr.NoPostFound });
- 
+
   res.json({ message: Language.fr.CommentUpdated });
 };
  */

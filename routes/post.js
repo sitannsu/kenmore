@@ -19,6 +19,9 @@ const {
 const { requireSignin } = require('../controllers/auth');
 const { userById } = require('../controllers/user');
 const { createPostValidator } = require('../validator');
+const multer = require('multer')
+const inMemoryStorage = multer.memoryStorage();
+const singleFileUpload = multer({ storage: inMemoryStorage });
 
 const router = express.Router();
 
@@ -35,7 +38,7 @@ router.put('/post/uncomment', requireSignin, uncomment);
 router.put('/post/updatecomment', requireSignin, updateComment);
 
 // post routes
-router.post('/post/new/:userId',requireSignin,  createPost, createPostValidator);
+router.post('/post/new/:userId',requireSignin,singleFileUpload.single('photo'), createPost, createPostValidator);
 router.get('/posts/by/:userId', requireSignin, postsByUser);
 router.get('/post/:postId', singlePost);
 router.put('/post/:postId', requireSignin, isPoster, updatePost);
