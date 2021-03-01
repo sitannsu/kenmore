@@ -38,10 +38,10 @@ const userSchema = new mongoose.Schema({
     //     data: Buffer,
     //     contentType: String
     // },
-    photo: {
-        type: String,
-        trim: true,
-    },
+    // photo: {
+    //     type: String,
+    //     trim: true,
+    // },
     address: {
         type: String
     },

@@ -29,8 +29,8 @@ router.put("/user/unfollow", removeFollowing, removeFollower);
 router.get("/users", allUsers);
 router.get("/user/:userId", requireSignin, getUser);
 //router.post("/user/:userId", requireSignin, hasAuthorization, updateUser);
-router.post("/user/:userId", singleFileUpload.single('photo'),  updateUser);
-//router.post("/user/:userId", singleFileUpload.single('profileImageUrl'),  updateUser);
+//router.post("/user/:userId",requireSignin, singleFileUpload.single('photo'),  updateUser);
+router.post("/user/:userId",requireSignin, singleFileUpload.single('profileImageUrl'),  updateUser);
 router.delete("/user/:userId", deleteUser);
 // photo
 router.get("/user/photo/:userId", userPhoto);

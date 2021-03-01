@@ -132,8 +132,8 @@ exports.updateUser = async (req, res) => {
     if (req.file) {
         imageUrl =  await uploadFileTos3('images',req.file)
         console.log("imageurl", imageUrl);
-        user.photo= imageUrl.url;
-       // user.profileImageUrl= imageUrl.url;
+        //user.photo= imageUrl.url;
+        user.profileImageUrl= imageUrl.url;
         // user.photo.data = fs.readFileSync(files.photo.path);
         // user.photo.contentType = files.photo.type;
     }
@@ -212,10 +212,14 @@ exports.testimonialUser = (req, res) => {
     };
 
 exports.userPhoto = (req, res, next) => {
-    console.log("reqqq", req.file);
-    if (req.profile.photo.data) {
-        res.set(('Content-Type', req.profile.photo.contentType));
-        return res.send(req.profile.photo.data);
+    console.log("reqqq", req);
+    // if (req.profile.photo) {
+    //     res.set(('Content-Type', req.profile.photo.contentType));
+    //     return res.send(req.profile.photo);
+    // }
+    if (req.profile.profileImageUrl) {
+        res.set(('Content-Type', req.profile.profileImageUrl.contentType));
+        return res.send(req.profile.profileImageUrl);
     }
     next();
 };
