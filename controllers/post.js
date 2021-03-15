@@ -6,9 +6,9 @@ const { uploadFileTos3 } = require('./videoupload');
 
 exports.postById = (req, res, next, id) => {
     Post.findById(id)
-        .populate('postedBy', '_id name')
-        .populate('comments.postedBy', '_id name')
-        .populate('postedBy', '_id name role')
+        .populate('postedBy', '_id firstName lastName')
+        .populate('comments.postedBy', '_id firstName lastName')
+        .populate('postedBy', '_id firstName lastName role')
         .select('_id title body created likes comments photo')
         .exec((err, post) => {
             if (err || !post) {
@@ -52,9 +52,9 @@ exports.getPosts = async (req, res) => {
             return Post.find()
                 .skip((currentPage - 1) * perPage)
                 .populate('comments', 'text created')
-                .populate('comments.postedBy', '_id name')
-                .populate('postedBy', '_id name')
-                .select('_id title body created likes')
+                .populate('comments.postedBy', '_id firstName lastName')
+                .populate('postedBy', '_id firstName lastName')
+                .select('_id title body created likes photo')
                 .limit(perPage)
                 .sort({ created: -1 });
         })
@@ -102,8 +102,9 @@ catch(error) {
 
 exports.postsByUser = (req, res) => {
     Post.find({ postedBy: req.profile._id })
-        .populate('postedBy', '_id name')
-        .select('_id title body created likes')
+        .populate('postedBy', '_id firstName lastName')
+        .populate('comments', 'text created')
+        .select('_id title body created likes photo')
         .sort('_created')
         .exec((err, posts) => {
             if (err) {

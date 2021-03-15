@@ -12,7 +12,7 @@ const {
 
 
 
-router.post('/video/upload', singleFileUpload.single('file'), imageUpload);
+router.post('/image/upload', singleFileUpload.single('file'), imageUpload);
 // router.post('/media/mediainfo', uploadVideoInfo);
 // router.get('/media/getallmedia', findAllmedia);
 // router.post('/media/like', like);

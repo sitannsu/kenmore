@@ -46,7 +46,7 @@ exports.allUsers = (req, res) => {
         }
         res.json(users);
     })
-        .select('_id name email address gender pinCode profileImageUrl showAdd fcmToken playerId hashed_password updated created role following followers friends bankAccountNumber bankAccountProof addressProof');
+        .select('_id firstName lastName email  profileImageUrl visitedUsers testimonialUser fcmToken playerId hashed_password updated created role following followers friends');
 };
 
 exports.getUser = (req, res) => {
@@ -129,14 +129,15 @@ exports.updateUser = async (req, res) => {
     user.updated = Date.now();
      console.log("USER FORM DATA UPDATE: ", user);
 
-    if (req.file) {
-        imageUrl =  await uploadFileTos3('images',req.file)
-        console.log("imageurl", imageUrl);
-        //user.photo= imageUrl.url;
-        user.profileImageUrl= imageUrl.url;
-        // user.photo.data = fs.readFileSync(files.photo.path);
-        // user.photo.contentType = files.photo.type;
-    }
+    // if (req.file) {
+    //     imageUrl =  await uploadFileTos3('images',req.file)
+        
+    //     console.log("imageurl", imageUrl);
+    //     //user.photo= imageUrl.url;
+    //     user.profileImageUrl= imageUrl.url;
+    //     // user.photo.data = fs.readFileSync(files.photo.path);
+    //     // user.photo.contentType = files.photo.type;
+    // }
 
     user.save((err, result) => {
         if (err) {
@@ -150,7 +151,19 @@ exports.updateUser = async (req, res) => {
         res.json(user);
     });
 }
+exports.uploadImage = async (req, res) => {
+        try {
+            console.log("req", req)
+            const content = req.file;
+            console.log("--------" + content);
+            const image = await uploadFileTos3('images', req.file); // images is a directory in the Azure container
+            return res.status(200).json({message: "image uploaded successfully", url:image});
+        } catch (error) {
+            console.log("--------error" + error);
+            next(error);
+        }
 
+}
  // Visited Users
 exports.visitedUsers = (req, res) => {
     let user = req.profile;

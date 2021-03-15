@@ -24,8 +24,10 @@ exports.createPostValidator = (req, res, next) => {
 
 exports.userSignupValidator = (req, res, next) => {
     // name is not null and between 4-10 characters
-    req.check('name', 'Name is required').notEmpty();
+    req.check('firstName', 'firstName is required').notEmpty();
+    req.check('lastName', 'lastName is required').notEmpty();
     // email is not null, valid and normalized
+    req.check('email', 'email  is required').notEmpty();
     req.check('email', 'Email must be between 3 to 32 characters')
         .matches(/.+\@.+\..+/)
         .withMessage('Email must contain @')
@@ -33,6 +35,17 @@ exports.userSignupValidator = (req, res, next) => {
             min: 4,
             max: 2000
         });
+     // phone is required
+     req.check('phone', 'phone number is required').notEmpty();
+     req.check('phone', 'phone number must be 10 ')
+     .matches(/^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/)
+     .withMessage('must be a phone number')
+     .isLength({
+         min: 10,
+         max: 12
+     });
+     // check for Terms&Conditions
+     req.check('isTermsConditions', 'isTermsConditions field is required').notEmpty();
     // check for password
     req.check('password', 'Password is required').notEmpty();
     req.check('password')

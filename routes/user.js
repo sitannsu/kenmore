@@ -14,7 +14,8 @@ const {
     visitedUsers,
     allVisitedUsers,
     testimonialUser,
-    hasAuthorization
+    hasAuthorization,
+    uploadImage
 } = require("../controllers/user");
 const { requireSignin } = require("../controllers/auth");
 const multer = require('multer')
@@ -30,7 +31,9 @@ router.get("/users", allUsers);
 router.get("/user/:userId", requireSignin, getUser);
 //router.post("/user/:userId", requireSignin, hasAuthorization, updateUser);
 //router.post("/user/:userId",requireSignin, singleFileUpload.single('photo'),  updateUser);
-router.post("/user/:userId",requireSignin, singleFileUpload.single('profileImageUrl'),  updateUser);
+//router.post("/user/:userId",requireSignin, singleFileUpload.single('profileImageUrl'),  updateUser);
+router.put("/user/:userId",requireSignin,updateUser);
+router.post("/updateImageUrl", singleFileUpload.single('imageUrl'),uploadImage);
 router.delete("/user/:userId", deleteUser);
 // photo
 router.get("/user/photo/:userId", userPhoto);

@@ -6,7 +6,12 @@ const { ObjectId } = mongoose.Schema;
 const Post = require("./post");
 var friends = require("mongoose-friends");
 const userSchema = new mongoose.Schema({
-    name: {
+    firstName: {
+        type: String,
+        trim: true,
+        required: true
+    },
+    lastName: {
         type: String,
         trim: true,
         required: true
@@ -16,6 +21,16 @@ const userSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
+    phone:{
+        type:Number,
+        trim: true,
+        required: true
+    },
+    isTermsConditions:{
+        type:Boolean, 
+        required:true
+    },
+
     // fcmToken: {
     //     type: String,
     //     required: true
@@ -42,20 +57,14 @@ const userSchema = new mongoose.Schema({
     //     type: String,
     //     trim: true,
     // },
-    address: {
+    profileDescription: {
         type: String
     },
-    gender: {
-        type: String
-    },
-    pinCode: {
+    coverImageUrl: {
         type: String
     },
     profileImageUrl: {
         type: String
-    },
-    showAdd: {
-        type: Boolean
     },
     about: {
         type: String,
@@ -71,10 +80,8 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "subscriber"
     },
-  
-    addressProof: {
-        type: String
-    },
+   
+
     visitedUsers:[ { userId:String , visitedTime:{ type: Date, default: Date.now } } ],
     testimonialUser: [
         {
