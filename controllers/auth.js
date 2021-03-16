@@ -5,10 +5,19 @@ const User = require('../models/user');
 const _ = require('lodash');
 const { OAuth2Client } = require('google-auth-library');
 const { sendEmail } = require('../helpers');
+const { isBoolean } = require('lodash');
 
 exports.signup = async (req, res) => {
     const userExists = await User.findOne({ email: req.body.email });
     let isTermsConditionsApply = req.body.isTermsConditions;
+    if (typeof(isTermsConditionsApply) === "boolean"){
+        console.log("is a boolean")
+        }
+        else{
+            return res.status(403).json({
+                error: 'input boolean'
+            });   
+        }
      console.log(" a new user added", req.body);
     if (userExists)
         return res.status(403).json({
@@ -18,11 +27,19 @@ exports.signup = async (req, res) => {
             return res.status(403).json({
                 message:"please accept the terms and conditions"
             })
-
         }
     const user = await new User(req.body);
-  await user.save();
-    res.status(200).json({ message: 'Signup success! Please login.' });
+  await user.save((err, result) => {
+      
+        if (err) {
+            return res.status(400).json({
+                error: err
+            });
+        }
+        res.status(200).json({ message: 'Signup success! Please login.' });
+    }
+  );
+   
 };
 
 exports.signin = (req, res) => {
