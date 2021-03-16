@@ -61,15 +61,36 @@ const userSchema = new mongoose.Schema({
         type: String
     },
     coverImageUrl: {
-        type: String
+        type: String,
+        default: ""
     },
     profileImageUrl: {
-        type: String
-    },
-    about: {
         type: String,
-        trim: true
+        default: ""
     },
+
+    address:{
+        type: String,
+        default: ""
+    },
+    liveLocation:{
+        type: String,
+        default: ""
+    },
+    dob:{
+        type: Date,
+        default: ""
+    },
+    studiedAt:{
+        type: String,
+        default: ""
+    },
+    worksAt:{
+        type: String,
+        default: ""
+    },
+
+   
     following: [{ type: ObjectId, ref: "User" }],
     followers: [{ type: ObjectId, ref: "User" }],
     resetPasswordLink: {

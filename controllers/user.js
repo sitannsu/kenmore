@@ -46,7 +46,7 @@ exports.allUsers = (req, res) => {
         }
         res.json(users);
     })
-        .select('_id firstName lastName email  profileImageUrl visitedUsers testimonialUser fcmToken playerId hashed_password updated created role following followers friends');
+        .select('_id firstName lastName email address liveLocation dob studiedAt worksAt profileImageUrl visitedUsers testimonialUser fcmToken playerId hashed_password updated created role following followers friends profileDescription coverImageUrl');
 };
 
 exports.getUser = (req, res) => {
@@ -151,6 +151,7 @@ exports.updateUser = async (req, res) => {
         res.json(user);
     });
 }
+
 exports.uploadImage = async (req, res) => {
         try {
             console.log("req", req)
