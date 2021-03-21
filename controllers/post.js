@@ -52,8 +52,8 @@ exports.getPosts = async (req, res) => {
             return Post.find()
                 .skip((currentPage - 1) * perPage)
                 .populate('comments', 'text created')
-                .populate('comments.postedBy', '_id firstName lastName')
-                .populate('postedBy', '_id firstName lastName')
+                .populate('comments.postedBy', '_id firstName lastName profileImageUrl')
+                .populate('postedBy', '_id firstName lastName profileImageUrl')
                 .select('_id title body created likes photo')
                 .limit(perPage)
                 .sort({ created: -1 });
@@ -76,7 +76,7 @@ exports.createPost = async (req, res, next) => {
         req.profile.hashed_password = undefined;
         req.profile.salt = undefined;
         post.postedBy = req.profile;
-
+        
         if (req.file) {
             // post.photo.data = fs.readFileSync(files.photo.path);
             // post.photo.contentType = files.photo.type;

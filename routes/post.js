@@ -38,7 +38,7 @@ router.put('/post/uncomment', requireSignin, uncomment);
 router.put('/post/updatecomment', requireSignin, updateComment);
 
 // post routes
-router.post('/post/new/:userId',requireSignin,singleFileUpload.single('photo'), createPost, createPostValidator);
+router.post('/post/new/:userId',requireSignin,singleFileUpload.single('photo'),  createPost,createPostValidator);
 router.get('/posts/by/:userId', requireSignin, postsByUser);
 router.get('/post/:postId', singlePost);
 router.put('/post/:postId', requireSignin, isPoster, updatePost);
