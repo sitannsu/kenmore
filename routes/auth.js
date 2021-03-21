@@ -12,8 +12,8 @@ router.post('/signin', userSigninValidator, signin);
 router.get('/signout', signout);
 
 // password forgot and reset routes
-router.put('/forgot-password', forgotPassword);
-router.put('/reset-password',  resetPassword);
+//router.put('/forgot-password', forgotPassword);
+
 
 // then use this route for social login
 router.post('/social-login', socialLogin);
@@ -23,6 +23,7 @@ router.post('/social-login', socialLogin);
 //forgot password otp 
 router.post('/sendOtp', sendOtp);
 router.post('/verifyOtp', verifyOtp);
+router.put('/reset-password',  resetPassword);
 
 // any route containing :userId, our app will first execute userByID()
 router.param('userId', userById);

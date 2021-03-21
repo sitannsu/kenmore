@@ -263,3 +263,31 @@ res.status(200).json({success: 'otp verify successfully'})
     });
 
   }
+  exports.resetPassword=(req,res)=>{
+    const { userID, newPassword } = req.body;
+
+    User.findOne({ _id:userID }, (err, user) => {
+        // if err or no user
+        if (err || !user)
+            return res.status('401').json({
+               message:'error occured'
+            });
+
+        
+            user.password= newPassword;
+            user.updated=Date.now();
+
+        user.save((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            res.json({
+                message: 'Now you can login with your new password.'
+            });
+        });
+    });
+
+
+  }
