@@ -6,6 +6,10 @@ const _ = require('lodash');
 const { OAuth2Client } = require('google-auth-library');
 const { sendEmail } = require('../helpers');
 const { isBoolean } = require('lodash');
+const axios = require('axios');
+const TwoFactor = new(require('2factor'))('eec85aaf-8a1f-11eb-a9bc-0200cd936042')
+//const SendOtp = require('sendotp');
+//const sendOtp = new SendOtp('355621AtYK2v4Mq604071d5P1');
 
 exports.signup = async (req, res) => {
     const userExists = await User.findOne({ email: req.body.email });
@@ -234,3 +238,28 @@ exports.socialLogin = async (req, res) => {
 //     }
 // });
 // };
+
+  exports.sendOtp = (req,res)=>{
+    axios.get(`https://2factor.in/API/V1/eec85aaf-8a1f-11eb-a9bc-0200cd936042/SMS/+91${req.body.number}/AUTOGEN`)
+    .then(response => {
+
+        console.log("response",response.data.Details)
+res.status(200).json({success: 'otp sent successfully', sessionID:response.data.Details})
+    })
+    .catch(error => {
+        res.status(500).json({error: error})
+      console.log(error);
+    });
+
+  }
+  exports.verifyOtp = (req,res)=>{
+    axios.get(`https://2factor.in/API/V1/eec85aaf-8a1f-11eb-a9bc-0200cd936042/SMS/VERIFY/${req.body.sessionID}/${req.body.otp}`)
+    .then(response => {
+res.status(200).json({success: 'otp verify successfully'})
+    })
+    .catch(error => {
+        res.status(500).json({error: error})
+      console.log(error);
+    });
+
+  }

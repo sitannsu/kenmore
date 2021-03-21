@@ -7,7 +7,7 @@ const { uploadFileTos3 } = require('./videoupload');
 exports.postById = (req, res, next, id) => {
     Post.findById(id)
         .populate('postedBy', '_id firstName lastName')
-        .populate('comments.postedBy', '_id firstName lastName')
+        .populate('comments.postedBy', '_id firstName lastName profileImageUrl')
         .populate('postedBy', '_id firstName lastName role')
         .select('_id title body created likes comments photo')
         .exec((err, post) => {

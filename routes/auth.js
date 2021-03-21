@@ -1,5 +1,5 @@
 const express = require('express');
-const { signup, signin, signout, forgotPassword, resetPassword, socialLogin } = require('../controllers/auth');
+const { signup, signin, signout, forgotPassword, resetPassword, socialLogin, sendOtp, verifyOtp } = require('../controllers/auth');
 
 // import password reset validator
 const { userSignupValidator, userSigninValidator, passwordResetValidator } = require('../validator');
@@ -17,6 +17,12 @@ router.put('/reset-password',  resetPassword);
 
 // then use this route for social login
 router.post('/social-login', socialLogin);
+
+
+
+//forgot password otp 
+router.post('/sendOtp', sendOtp);
+router.post('/verifyOtp', verifyOtp);
 
 // any route containing :userId, our app will first execute userByID()
 router.param('userId', userById);
