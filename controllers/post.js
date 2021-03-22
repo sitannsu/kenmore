@@ -259,7 +259,9 @@ exports.unlike = (req, res) => {
 exports.comment = (req, res) => {
     let comment = {text:req.body.comment};
     comment.postedBy = req.body.userId;
-
+if(req.body.userId === null ||req.body.postId=== null ){
+    res.status(500).json({message:'Post ID or User Id is missing'})
+}
     Post.findByIdAndUpdate(req.body.postId, { $push: { comments: comment } }, { new: true })
         .populate('comments.postedBy', '_id name')
         .populate('postedBy', '_id name')
@@ -274,6 +276,33 @@ exports.comment = (req, res) => {
         });
 };
 
+// exports.likeComment = (req, res) => {
+//     console.log("body", req.body)
+//     Post.findById(req.body.postId, (error, requiredPost)=>{
+//      let likeObjectIndex = requiredPost? requiredPost.comments[0].likes.findIndex(item => {
+//     return item.userId === req.body.userId
+//      }):-1;
+
+//     if(likeObjectIndex>-1){
+//         likeObject= {...requiredPost.comments[0].likes[likeObjectIndex], userId:req.body.userId , count:requiredPost.comments[0].likes[likeObjectIndex].count + 1}
+//         requiredPost.comments[0].likes[likeObjectIndex] = likeObject
+//     }
+//     else {
+//         likeObject = {userId:req.body.userId, count:1}
+//         requiredPost.comments[0].likes.push(likeObject)
+//     }
+//     requiredPost.save()
+//       if (error) {
+//         console.log("err", error)
+//         return res.status(400).json({
+//        error: error
+
+//         });
+//     } else {
+//         res.json(requiredPost);
+//     }
+// })
+// };
 exports.likeComment = (req, res) => {
     console.log("body", req.body)
     Post.findById(req.body.postId, (error, requiredPost)=>{
@@ -301,7 +330,6 @@ exports.likeComment = (req, res) => {
     }
 })
 };
-
 
 exports.uncomment = (req, res) => {
     let comment = req.body.comment;

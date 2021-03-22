@@ -24,6 +24,8 @@ exports.requestFriend =  (req, res) => {
     });
 };
 
+
+
 exports.getFriends = (req, res) => {
     console.log("get api involked" + req.params.userId)
     User.getFriends(req.params.userId, function (err, friendships) {
