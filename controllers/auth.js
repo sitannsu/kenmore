@@ -276,13 +276,13 @@ res.status(200).json({success: 'otp verify successfully'})
 
   }
 exports.resetPassword=(req,res)=>{
-    const { userID, newPassword ,number} = req.body;
+    const { newPassword , number} = req.body;
 
-    User.findOne({ _id:userID }, (err, user) => {
+    User.findOne({ phone:number }, (err, user) => {
         // if err or no user
         if (err || !user)
             return res.status('401').json({
-               message:'error occured'
+               message:'number does not exists'
             });
 
         
