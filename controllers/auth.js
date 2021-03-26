@@ -13,6 +13,12 @@ const TwoFactor = new(require('2factor'))('eec85aaf-8a1f-11eb-a9bc-0200cd936042'
 
 exports.signup = async (req, res) => {
     const userExists = await User.findOne({ email: req.body.email });
+    const numberExists = await User.findOne({ phone: req.body.phone });
+
+    if (numberExists)
+        return res.status(403).json({
+            error: 'Already have an account on this Number!'
+        });
     let isTermsConditionsApply = req.body.isTermsConditions;
     if (typeof(isTermsConditionsApply) === "boolean"){
         console.log("is a boolean")
