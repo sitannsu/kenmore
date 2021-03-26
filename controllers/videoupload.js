@@ -1,6 +1,7 @@
 
 const aws = require('aws-sdk');
 const Jimp = require('jimp');
+const getStream = require('get-stream');
 //const s3 = new aws.S3();
 //   const fileName = req.query['file-name'];
 //   const fileType = req.query['file-type'];
@@ -55,18 +56,7 @@ const Jimp = require('jimp');
 
 // const containerName = `videocontainer${new Date().getTime()}`;
 
-exports.imageUpload = async (req, res, next) => {
-    try {
-        console.log("req", req)
-        const content = req.file;
-        console.log("--------" + content);
-        const image = await uploadFileTos3('images', req.file); // images is a directory in the Azure container
-        return res.status(200).json({message: "image uploaded successfully", url:image});
-    } catch (error) {
-        console.log("--------error" + error);
-        next(error);
-    }
-};
+
 
 
 // upload = async (directoryPath, file) => {
@@ -125,6 +115,9 @@ exports.uploadFileTos3 = ( (directoryPath, image)=>{
            // image.print(font, 1000, 700, 'Logo');
             return image.getBufferAsync(Jimp.AUTO);
           })
+    
+
+      
           const params = {
             Bucket: process.env.S3_BUCKET,
             Key: image.originalname,

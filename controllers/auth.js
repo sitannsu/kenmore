@@ -134,36 +134,36 @@ exports.forgotPassword = (req, res) => {
 // if the user's resetPasswordLink(token) matches the incoming req.body.resetPasswordLink(token)
 // then we got the right user
 
-exports.resetPassword = (req, res) => {
-    const { resetPasswordLink, newPassword } = req.body;
+// exports.resetPassword = (req, res) => {
+//     const { resetPasswordLink, newPassword } = req.body;
 
-    User.findOne({ resetPasswordLink }, (err, user) => {
-        // if err or no user
-        if (err || !user)
-            return res.status('401').json({
-                error: 'Invalid Link!'
-            });
+//     User.findOne({ resetPasswordLink }, (err, user) => {
+//         // if err or no user
+//         if (err || !user)
+//             return res.status('401').json({
+//                 error: 'Invalid Link!'
+//             });
 
-        const updatedFields = {
-            password: newPassword,
-            resetPasswordLink: ''
-        };
+//         const updatedFields = {
+//             password: newPassword,
+//             resetPasswordLink: ''
+//         };
 
-        user = _.extend(user, updatedFields);
-        user.updated = Date.now();
+//         user = _.extend(user, updatedFields);
+//         user.updated = Date.now();
 
-        user.save((err, result) => {
-            if (err) {
-                return res.status(400).json({
-                    error: err
-                });
-            }
-            res.json({
-                message: `Great! Now you can login with your new password.`
-            });
-        });
-    });
-};
+//         user.save((err, result) => {
+//             if (err) {
+//                 return res.status(400).json({
+//                     error: err
+//                 });
+//             }
+//             res.json({
+//                 message: `Great! Now you can login with your new password.`
+//             });
+//         });
+//     });
+// };
 
 const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);
 
@@ -238,21 +238,33 @@ exports.socialLogin = async (req, res) => {
 //     }
 // });
 // };
+exports.sendOtp = async (req,res)=>{
+    const { phone } = req.body;
+    User.findOne({ phone }, (err, user) => {
+        // if err or no user
+        if (err || !user) {
+            return res.status(401).json({
+                error: 'User with that Number does not exist. Please signup.'
+            });
+        }
+        axios.get(`https://2factor.in/API/V1/eec85aaf-8a1f-11eb-a9bc-0200cd936042/SMS/+91${req.body.phone}/AUTOGEN`)
+        .then(response => {
+    
+            console.log("response",response.data.Details)
+    res.status(200).json({success: 'otp sent successfully', sessionID:response.data.Details})
+        })
+        .catch(error => {
+            res.status(500).json({error: error})
+          console.log(error);
+        });
 
-  exports.sendOtp = (req,res)=>{
-    axios.get(`https://2factor.in/API/V1/eec85aaf-8a1f-11eb-a9bc-0200cd936042/SMS/+91${req.body.number}/AUTOGEN`)
-    .then(response => {
-
-        console.log("response",response.data.Details)
-res.status(200).json({success: 'otp sent successfully', sessionID:response.data.Details})
-    })
-    .catch(error => {
-        res.status(500).json({error: error})
-      console.log(error);
     });
+     
+
+
 
   }
-  exports.verifyOtp = (req,res)=>{
+exports.verifyOtp = (req,res)=>{
     axios.get(`https://2factor.in/API/V1/eec85aaf-8a1f-11eb-a9bc-0200cd936042/SMS/VERIFY/${req.body.sessionID}/${req.body.otp}`)
     .then(response => {
 res.status(200).json({success: 'otp verify successfully'})
@@ -263,8 +275,8 @@ res.status(200).json({success: 'otp verify successfully'})
     });
 
   }
-  exports.resetPassword=(req,res)=>{
-    const { userID, newPassword } = req.body;
+exports.resetPassword=(req,res)=>{
+    const { userID, newPassword ,number} = req.body;
 
     User.findOne({ _id:userID }, (err, user) => {
         // if err or no user

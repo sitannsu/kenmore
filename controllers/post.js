@@ -308,6 +308,38 @@ exports.likeComment = (req, res) => {
     }
 })
 };
+exports.disslikeComment = (req, res) => {
+    console.log("body", req.body)
+    Post.findById(req.body.postId, (error, requiredPost)=>{
+      let commentObjectIndex=  requiredPost? requiredPost.comments.findIndex(item => {
+        return item._id.toString() === req.body.commentId
+         }):-1; 
+         console.log("commentIndex", commentObjectIndex);
+         console.log("requiredPost", requiredPost);
+     let likeObjectIndex = requiredPost? requiredPost.comments[commentObjectIndex].likes.findIndex(item => {
+    return item.userId === req.body.userId
+     }):-1;
+
+    if(likeObjectIndex>-1){
+        likeObject= {...requiredPost.comments[commentObjectIndex].likes[likeObjectIndex], userId:req.body.userId , count:requiredPost.comments[0].likes[likeObjectIndex].count + 1}
+        requiredPost.comments[commentObjectIndex].likes[likeObjectIndex] = likeObject
+    }
+    else {
+        likeObject = {userId:req.body.userId, count:1}
+        requiredPost.comments[commentObjectIndex].likes.push(likeObject)
+    }
+    requiredPost.remove()
+      if (error) {
+        console.log("err", error)
+        return res.status(400).json({
+       error: error
+
+        });
+    } else {
+        res.json(requiredPost);
+    }
+})
+};
 
 // exports.likeComment = (req, res) => {
 //     console.log("body", req.body)
@@ -453,3 +485,15 @@ exports.updateComment = async (req, res) => {
   res.json({ message: Language.fr.CommentUpdated });
 };
  */
+exports.imageUpload = async (req, res, next) => {
+    try {
+        console.log("req", req)
+        const content = req.file;
+        console.log("--------" + content);
+        const image = await uploadFileTos3('images', req.file); // images is a directory in the Azure container
+        return res.status(200).json({message: "image uploaded successfully", url:image});
+    } catch (error) {
+        console.log("--------error" + error);
+        next(error);
+    }
+};

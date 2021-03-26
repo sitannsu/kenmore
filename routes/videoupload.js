@@ -3,16 +3,14 @@ const multer = require('multer')
 const inMemoryStorage = multer.memoryStorage();
 const singleFileUpload = multer({ storage: inMemoryStorage });
 const formidable = require('formidable');
+const { imageUpload } = require('../controllers/post');
 
 const router = express.Router();
 
-const {
-    imageUpload,
-} = require('../controllers/videoupload');
 
 
 
-router.post('/image/upload', singleFileUpload.single('file'), imageUpload);
+router.post('/image/upload', singleFileUpload.array('file'),imageUpload);
 // router.post('/media/mediainfo', uploadVideoInfo);
 // router.get('/media/getallmedia', findAllmedia);
 // router.post('/media/like', like);
