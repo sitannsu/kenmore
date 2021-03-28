@@ -1,5 +1,8 @@
+const { request } = require("http");
+
 exports.createPostValidator = (req, res, next) => {
     // title
+    console.log("request from validator",req)
     req.check('title', 'Write a title').notEmpty();
     req.check('title', 'Title must be between 4 to 150 characters').isLength({
         min: 4,
