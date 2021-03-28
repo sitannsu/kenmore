@@ -99,71 +99,204 @@ const getStream = require('get-stream');
 //     containerName: `videocontainer`
 // };
 
-exports.uploadFileTos3 = ( (directoryPath, image)=>{
-    return new Promise(async (resolve, reject) => {
-        let s3bucket = new aws.S3({
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-           //region: process.env.AWS_REGION
-          });
-          const file = await Jimp.read(Buffer.from(image.buffer, 'base64'))
-          .then(async image => {
-            //const background = await Jimp.read('https://url/background.png');
-           // const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
-            //image.resize(Jimp.AUTO, 900);
-           // image.composite(background, 1000, 700);
-           // image.print(font, 1000, 700, 'Logo');
-            return image.getBufferAsync(Jimp.AUTO);
-          })
-    
+// exports.uploadFileTos3 = ( (directoryPath, image)=>{
+//     return new Promise(async (resolve, reject) => {
+//         let s3bucket = new aws.S3({
+//             accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//             secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+//            //region: process.env.AWS_REGION
+//           });
+//           const file = await Jimp.read(Buffer.from(image.buffer, 'base64'))
+//           .then(async image => {
+//             //const background = await Jimp.read('https://url/background.png');
+//            // const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
+//             //image.resize(Jimp.AUTO, 900);
+//            // image.composite(background, 1000, 700);
+//            // image.print(font, 1000, 700, 'Logo');
+//             return image.getBufferAsync(Jimp.AUTO);
+//           })
 
-      
-          const params = {
-            Bucket: process.env.S3_BUCKET,
-            Key: image.originalname,
-            Body: file,
-            ContentType: image.mimetype,
-            ACL: 'public-read'
-          };
-       // const s3 = new aws.S3();
-        console.log("File", image);
-        const fileName = image.originalname;
-        //const fileType = req.query['file-type'];
-        const s3Params = {
-          Bucket: 'vanamimage',
-          Key: fileName,
-          Expires: 60,
+
+//           var ResponseData = [];
+//        // const file = image.buffer
+
+
+//           const params = {
+//             Bucket:  process.env.AWS_BUCKET_NAME,
+//             Key: image.originalname,
+//             Body: file,
+//             ContentType: image.mimetype,
+//             ACL: 'public-read'
+//           };
+//        // const s3 = new aws.S3();
+//         console.log("File", image);
+//         const fileName = image.originalname;
+//         //const fileType = req.query['file-type'];
+//         const s3Params = {
+//           Bucket: 'vanamimage',
+//           Key: fileName,
+//           Expires: 60,
+//           ContentType: image.mimetype,
+//           ACL: 'public-read'
+//         };
+//         console.log("param", params)
+//         s3bucket.upload(params,  (err, data) => {
+//             // if(err){
+//             //   console.log(err);
+//             //   reject(err);
+//             // }
+//             // else{
+//             //     resolve({
+//             //         url: `https://vanamimage.s3.us-east-2.amazonaws.com/${fileName}`
+//             //     });
+//             // }
+//             if (err) {
+//               resolve({ "error": true, "Message": err});
+//             }else{
+//                 ResponseData.push(data.Location);
+//                 if(ResponseData.length == file.length){
+//                   resolve({  url: ResponseData});
+//                 }
+//               }
+//           });
+
+// })
+// })
+// exports.uploadFileTos3 = ((directoryPath, video,req) => {
+//   return new Promise(async (resolve, reject) => {
+//     let s3bucket = new aws.S3({
+//       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+//     });
+//     var ResponseData = [];
+//     console.log("video",video)
+
+ 
+//   const file = video;
+ 
+//      file.map((item) => {
+//       const fileName = item.originalname;
+//       var params = {
+//         Bucket: process.env.AWS_BUCKET_NAME,
+//         Key: item.originalname,
+//         Body: item.buffer,
+//         ACL: 'public-read'
+//   };
+// s3bucket.upload(params, function (err, data) {
+//         // if (err) {
+//         //   resolve({ "error": true, "Message": err});
+//         // }else{
+//         //     ResponseData.push(data.Location);
+//         //     if(ResponseData.length == file.length){
+//         //       resolve({  url: ResponseData});
+//         //     }
+//         //   }
+//         if (err) {
+//           console.log(err);
+//           reject(err);
+//         }
+//         else {
+//           resolve({
+  
+//             url: `https://ngrvideo.s3.ap-south-1.amazonaws.com/${fileName}`
+//           });
+//         }
+//        });
+//      });
+//    });
+// })
+
+exports.uploadFileTos3 = ( (directoryPath, image)=>{
+  return new Promise(async (resolve, reject) => {
+      let s3bucket = new aws.S3({
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+         //region: process.env.AWS_REGION
+        });
+        const file = await Jimp.read(Buffer.from(image.buffer, 'base64'))
+        .then(async image => {
+          return image.getBufferAsync(Jimp.AUTO);
+        })
+      //const file = readChunk.sync(image.buffer, 0, 4100);
+        const params = {
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Key: image.originalname,
+          Body: file,
           ContentType: image.mimetype,
           ACL: 'public-read'
         };
-        console.log("param", params)
-        s3bucket.upload(params,  (err, data) => {
-            if(err){
-              console.log(err);
-              //return res.end();
-              reject(err);
-            }
-            else{
-                resolve({
-                    // filename: blobName,
-                    // originalname: file.originalname,
-                    // size: streamLength,
-                    // path: `${azureStorageConfig.containerName}/${directoryPath}/${blobName}`,
-                    url: `https://vanamimage.s3.us-east-2.amazonaws.com/${fileName}`
-                });
-            }
-            // const returnData = {
-            //   signedRequest: data,
-            //   //url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
-            //   url: `https://vanamimage.s3.amazonaws.com/${fileName}`
-            // };
-            // res.write(JSON.stringify(returnData));
-            // res.end();
-          });
-        
+     // const s3 = new aws.S3();
+      console.log("File", image);
+      const fileName = image.originalname;
+      //const fileType = req.query['file-type'];
+      const s3Params = {
+        Bucket: 'vanamimage',
+        Key: fileName,
+        Expires: 60,
+        ContentType: image.mimetype,
+        ACL: 'public-read'
+      };
+      console.log("param", params)
+      s3bucket.upload(params,  (err, data) => {
+          if(err){
+            console.log(err);
+            //return res.end();
+            reject(err);
+          }
+          else{
+              resolve({
+                  // filename: blobName,
+                  // originalname: file.originalname,
+                  // size: streamLength,
+                  // path: `${azureStorageConfig.containerName}/${directoryPath}/${blobName}`,
+                  url: `https://vanamimage.s3.ap-south-1.amazonaws.com/${fileName}`
+              });
+          }
+          // const returnData = {
+          //   signedRequest: data,
+          //   //url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+          //   url: `https://vanamimage.s3.amazonaws.com/${fileName}`
+          // };
+          // res.write(JSON.stringify(returnData));
+          // res.end();
+        });
+      
 })
 })
 
+exports.uploadVideoTos3 = ((directoryPath, video,req) => {
+  return new Promise(async (resolve, reject) => {
+    let s3bucket = new aws.S3({
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    });
+    var ResponseData = [];
+    console.log("video",video)
+
+ 
+  const file = video;
+ 
+     file.map((item) => {
+      const fileName = item.originalname;
+      var params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: item.originalname,
+        Body: item.buffer,
+        ACL: 'public-read'
+  };
+s3bucket.upload(params, function (err, data) {
+        if (err) {
+          resolve({ "error": true, "Message": err});
+        }else{
+            ResponseData.push(data.Location);
+            if(ResponseData.length == file.length){
+              resolve({  url: ResponseData});
+            }
+          }
+       });
+     });
+   });
+})
 
 uploadFileToBlob = async (directoryPath, file) => {
 

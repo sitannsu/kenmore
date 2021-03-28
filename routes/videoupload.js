@@ -10,6 +10,7 @@ const router = express.Router();
 
 
 
+//router.post('/image/upload', singleFileUpload.fields([{ name: 'file', maxCount: 5 }]),imageUpload);
 router.post('/image/upload', singleFileUpload.array('file'),imageUpload);
 // router.post('/media/mediainfo', uploadVideoInfo);
 // router.get('/media/getallmedia', findAllmedia);
