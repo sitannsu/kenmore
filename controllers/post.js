@@ -72,7 +72,7 @@ exports.createPost = async (req, res, next) => {
     console.log("requset", req);
 
         let post = new Post(req.body);
-
+       console.log("requested file ",req.file)
         req.profile.hashed_password = undefined;
         req.profile.salt = undefined;
         post.postedBy = req.profile;

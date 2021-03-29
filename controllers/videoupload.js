@@ -249,7 +249,7 @@ exports.uploadFileTos3 = ( (directoryPath, image)=>{
                   // originalname: file.originalname,
                   // size: streamLength,
                   // path: `${azureStorageConfig.containerName}/${directoryPath}/${blobName}`,
-                  url: `https://vanamimage.s3.ap-south-1.amazonaws.com/${fileName}`
+                  url: `https://vanamimage.s3.us-east-2.amazonaws.com/${fileName}`
               });
           }
           // const returnData = {
