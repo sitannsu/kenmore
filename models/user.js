@@ -31,10 +31,10 @@ const userSchema = new mongoose.Schema({
         required:true
     },
 
-    // fcmToken: {
-    //     type: String,
-    //     required: true
-    // },
+    fcmToken: {
+        type: String,
+        required: true
+    },
     playerId: {
         type: String,
        // required: true

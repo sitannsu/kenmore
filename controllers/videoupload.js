@@ -227,17 +227,21 @@ exports.uploadFileTos3 = ( (directoryPath, image)=>{
         };
      // const s3 = new aws.S3();
       console.log("File", image);
-      const fileName = image.originalname;
+      let originalFileName = image.originalname;
+      let splitedFileName = originalFileName.split('.')
+      fileName = new Date().getTime().toString()+'.'+splitedFileName[splitedFileName.length-1];
+       console.log("fileName",fileName)
       //const fileType = req.query['file-type'];
       const s3Params = {
         Bucket: 'vanamimage',
         Key: fileName,
+        Body: file,
         Expires: 60,
         ContentType: image.mimetype,
         ACL: 'public-read'
       };
       console.log("param", params)
-      s3bucket.upload(params,  (err, data) => {
+      s3bucket.upload(s3Params,  (err, data) => {
           if(err){
             console.log(err);
             //return res.end();
