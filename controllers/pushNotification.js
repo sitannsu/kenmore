@@ -6,7 +6,10 @@ exports.sendPushNotification = async (req, res) => {
     console.log("api invoked");
     var message = {
        // app_id: "73d3f8d8-d268-498b-b1eb-43db090eeaab",
-        app_id: "4caa225e-a77d-485c-bbc5-74e432aa6e2f",
+      //  app_id: "4caa225e-a77d-485c-bbc5-74e432aa6e2f",
+      app_id:"2fda0b56-2f68-426c-8b70-8990d7817d1b",   
+
+
         contents: { "en": req.body.message },
         include_player_ids: [receiver.playerId] //'48775227-9cc6-456c-ac55-467321e7173e'
     };

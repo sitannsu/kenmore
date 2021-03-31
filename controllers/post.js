@@ -2,7 +2,7 @@ const Post = require('../models/post');
 const formidable = require('formidable');
 const fs = require('fs');
 const _ = require('lodash');
-const { uploadFileTos3 } = require('./videoupload');
+const { uploadFileTos3, uploadVideoTos3 } = require('./videoupload');
 
 exports.postById = (req, res, next, id) => {
     Post.findById(id)
@@ -72,7 +72,7 @@ exports.createPost = async (req, res, next) => {
 //    console.log("requset", req);
 
         let post = new Post(req.body);
-
+       console.log("requested file ",req.file)
         req.profile.hashed_password = undefined;
         req.profile.salt = undefined;
         post.postedBy = req.profile;
@@ -487,13 +487,15 @@ exports.updateComment = async (req, res) => {
  */
 exports.imageUpload = async (req, res, next) => {
     try {
-        console.log("req", req)
+        console.log("req", req.files)
         const content = req.file;
-        console.log("--------" + content);
-        const image = await uploadFileTos3('images', req.file); // images is a directory in the Azure container
+      //  console.log("--------" + content);
+        const image = await uploadVideoTos3('images', req.files); // images is a directory in the Azure container
+        console.log("image data",image)
         return res.status(200).json({message: "image uploaded successfully", url:image});
+     
     } catch (error) {
         console.log("--------error" + error);
         next(error);
     }
-};
+  };

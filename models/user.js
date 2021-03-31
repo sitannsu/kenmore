@@ -31,7 +31,14 @@ const userSchema = new mongoose.Schema({
         required:true
     },
 
+<<<<<<< HEAD
     
+=======
+    fcmToken: {
+        type: String,
+       // required: true
+    },
+>>>>>>> c41cdb440cf1687516f4713226a928ddfee69ba8
     playerId: {
         type: String,
        // required: true
@@ -55,8 +62,50 @@ const userSchema = new mongoose.Schema({
     //     trim: true,
     // },
     profileDescription: {
-        type: String
+        type: String,
+        default:""
     },
+    CompanyName:{
+        type:String,
+        default:""
+    },
+    CompanyPosition:{
+        type:String,
+        default:""
+    },
+    CompanyLocation:{
+        type:String,
+        default:""
+    },
+    UnivercityName:{
+        type:String,
+        default:""
+    },
+    PreUnivercityName:{
+        type:String,
+        default:""
+    },
+    HighSchoolName:{
+        type:String,
+        default:""
+    },
+    CurrentPlace:{
+
+        type:String,
+        default:""  
+    },
+    CurrentPlaceCounty:{
+
+        type:String,
+        default:""  
+    },
+    CurrentPlaceCity:{
+
+        type:String,
+        default:""  
+    },
+    
+
     coverImageUrl: {
         type: String,
         default: ""
