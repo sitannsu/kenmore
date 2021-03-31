@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
 
     fcmToken: {
         type: String,
-        required: true
+       // required: true
     },
     playerId: {
         type: String,
