@@ -117,7 +117,7 @@ exports.userSigninValidator = (request, response, next) => {
     const errors = request.validationErrors();
     if (errors) {
         const firstError = errors.map(error => error.msg)[0];
-        return res.status(400).json({ error: firstError });
+        return response.status(400).json({ error: firstError });
     }
     next();
 };
