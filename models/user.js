@@ -85,7 +85,7 @@ const userSchema = new mongoose.Schema({
         type:String,
         default:""
     },
-    CurrentPlace:{
+    CurrentState:{
 
         type:String,
         default:""  
@@ -100,7 +100,22 @@ const userSchema = new mongoose.Schema({
         type:String,
         default:""  
     },
-    
+
+FromState:{
+    type:String,
+    default:""  
+
+},
+FromCountry:{
+    type:String,
+    default:""  
+
+},
+FromCity:{
+    type:String,
+    default:""  
+
+},
 
     coverImageUrl: {
         type: String,
