@@ -1,6 +1,6 @@
 const Notification = require('../models/notification');
 
-exports.allNotifications = async (req, res) => {
+exports.sendNotifications = async (req, res) => {
 
     const notification = new Notification(req.body);
     notification.user = req.body.currentUserId;
