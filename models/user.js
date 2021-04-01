@@ -31,14 +31,10 @@ const userSchema = new mongoose.Schema({
         required:true
     },
 
-<<<<<<< HEAD
-    
-=======
     fcmToken: {
         type: String,
        // required: true
     },
->>>>>>> c41cdb440cf1687516f4713226a928ddfee69ba8
     playerId: {
         type: String,
        // required: true
@@ -89,7 +85,7 @@ const userSchema = new mongoose.Schema({
         type:String,
         default:""
     },
-    CurrentState:{
+    CurrentPlace:{
 
         type:String,
         default:""  
@@ -104,22 +100,7 @@ const userSchema = new mongoose.Schema({
         type:String,
         default:""  
     },
-
-FromState:{
-    type:String,
-    default:""  
-
-},
-FromCountry:{
-    type:String,
-    default:""  
-
-},
-FromCity:{
-    type:String,
-    default:""  
-
-},
+    
 
     coverImageUrl: {
         type: String,
