@@ -243,17 +243,40 @@ exports.like = (req, res) => {
 };
 
 exports.unlike = (req, res) => {
-    Post.findByIdAndUpdate(req.body.postId, { $pull: { likes: req.body.userId } }, { new: true }).exec(
-        (err, result) => {
-            if (err) {
-                return res.status(400).json({
-                    error: err
-                });
-            } else {
-                res.json(result);
-            }
-        }
-    );
+    console.log("body", req.body)
+    Post.findById(req.body.postId, (error, requiredPost)=>{
+     let likeObjectIndex = requiredPost? requiredPost.likes.findIndex(item => {
+    return item.userId === req.body.userId
+     }):-1;
+
+     likeObject = requiredPost.likes.filter(function(el) { return el.userId != req.body.userId });
+     requiredPost.likes = likeObject
+   
+    
+    requiredPost.save()
+    // Post.updateOne((item) => {item._id === req.body.postId})
+    // (
+    //     (err, result) => {
+    //         console.log("err", err)
+    //         if (err) {
+    //             return res.status(400).json({
+    //                 error: err
+    //             });
+    //         } else {
+    //             res.json(result);
+    //         }
+    //     }
+    // );
+    if (error) {
+        console.log("err", error)
+        return res.status(400).json({
+       error: error
+
+        });
+    } else {
+        res.json(requiredPost);
+    }
+ })
 };
 
 exports.comment = (req, res) => {
