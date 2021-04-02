@@ -103,6 +103,7 @@ catch(error) {
 exports.postsByUser = (req, res) => {
     Post.find({ postedBy: req.profile._id })
         .populate('postedBy', '_id firstName lastName')
+        .populate('likedBy', '_id firstName lastName')
         .populate('comments', 'text created')
         .select('_id title body created likes photo')
         .sort('_created')
@@ -299,6 +300,20 @@ if(req.body.userId === null ||req.body.postId=== null ){
         });
 };
 
+exports.commentComment = (req, res) => {
+
+
+};
+
+
+
+
+
+
+
+
+
+
 exports.likeComment = (req, res) => {
     console.log("body", req.body)
     Post.findById(req.body.postId, (error, requiredPost)=>{
@@ -364,36 +379,7 @@ exports.disslikeComment = (req, res) => {
 })
 };
 
-// exports.likeComment = (req, res) => {
-//     console.log("body", req.body)
-//     Post.findById(req.body.postId, (error, requiredPost)=>{
-//      let likeObjectIndex = requiredPost? requiredPost.comments[0].likes.findIndex(item => {
-//     return item.userId === req.body.userId
-//      }):-1;
-//      requiredPost.comments.findById(req.body.postId, (error, requiredPost)=>{
-//         let likeObjectIndex = requiredPost? requiredPost.comments[0].likes.findIndex(item => {
-//        return item.userId === req.body.userId
-//         }):-1;
-// //     if(likeObjectIndex>-1){
-// //         likeObject= {...requiredPost.comments[0].likes[likeObjectIndex], userId:req.body.userId , count:requiredPost.comments[0].likes[likeObjectIndex].count + 1}
-// //         requiredPost.comments[0].likes[likeObjectIndex] = likeObject
-// //     }
-// //     else {
-// //         likeObject = {userId:req.body.userId, count:1}
-// //         requiredPost.comments[0].likes.push(likeObject)
-// //     }
-// //     requiredPost.save()
-// //       if (error) {
-// //         console.log("err", error)
-// //         return res.status(400).json({
-// //        error: error
 
-// //         });
-// //     } else {
-// //         res.json(requiredPost);
-// //     }
-//  })
-// };
 
 exports.uncomment = (req, res) => {
     let comment = req.body.comment;

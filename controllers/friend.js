@@ -23,7 +23,23 @@ exports.requestFriend =  (req, res) => {
                 sendNotification(message, res, result);
     });
 };
+exports.getAccepted =(req,res)=>{
+    console.log("api started")
+    User.findOne({ _id:req.body.userID }, (err, user) => {
+        // if err or no user
+        if (err || !user) {
+            return res.status(401).json({
+                error: 'user id not exist'
+            });
+        }
+        console.log("user",user)
+   user.getAcceptedFriends(
 
+   )
+       
+    });
+
+}
 
 
 exports.getFriends = (req, res) => {

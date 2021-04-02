@@ -30,7 +30,14 @@ const postSchema = new mongoose.Schema({
     },
     updated: Date,
 
-    likes: [ { userId:String ,count: Number  } ],
+    likes: [
+         {
+             likedBy: { type: ObjectId, ref: 'User' },
+              userId:String ,
+              count: Number  
+            
+            }
+        ],
 
     comments: [
         {
