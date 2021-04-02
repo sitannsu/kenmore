@@ -30,20 +30,25 @@ const postSchema = new mongoose.Schema({
     },
     updated: Date,
 
-    likes: [
-         {
-             likedBy: { type: ObjectId, ref: 'User' },
-              userId:String ,
-              count: Number  
-            
-            }
-        ],
+    likes: [ { userId:String ,count: Number, likedBy: { type: ObjectId, ref: 'User' }  } ],
 
     comments: [
         {
             text: String,
+            parentCommentId:[ { commentId:String  }],
             created: { type: Date, default: Date.now },
             postedBy: { type: ObjectId, ref: 'User' },
+            comments: [
+                {
+                    text: String,
+                    
+                    created: { type: Date, default: Date.now },
+                    postedBy: { type: ObjectId, ref: 'User' },
+            
+                    likes: [ { userId:String , count: Number  }]
+                }
+            ],
+    
             likes: [ { userId:String , count: Number  }]
         }
     ]

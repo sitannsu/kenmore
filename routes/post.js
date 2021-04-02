@@ -1,6 +1,7 @@
 const express = require('express');
 const {
     getPosts,
+    getPostsByUser,
     createPost,
     postsByUser,
     postById,

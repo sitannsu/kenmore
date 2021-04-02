@@ -32,10 +32,16 @@ exports.getAccepted =(req,res)=>{
                 error: 'user id not exist'
             });
         }
-        console.log("user",user)
-   user.getAcceptedFriends(
-
-   )
+       // console.log("user",user)
+ var Status = require("mongoose-friends").Status;
+ User.getFriends({ _id:req.body.userID }, function (err, friendships) {
+    if (err) {
+        return res.status(400).json({
+            error: err
+        });
+    }
+    res.json(friendships.filter(x=>x.status=="accepted"));
+});
        
     });
 

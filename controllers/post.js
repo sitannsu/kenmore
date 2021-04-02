@@ -202,44 +202,22 @@ exports.singlePost = (req, res) => {
 };
 
 exports.like = (req, res) => {
-    console.log("body", req.body)
-    Post.findById(req.body.postId, (error, requiredPost)=>{
-     let likeObjectIndex = requiredPost? requiredPost.likes.findIndex(item => {
-    return item.userId === req.body.userId
-     }):-1;
+    let like = req.body;
+    like.likedBy = req.body.userId;
 
-    if(likeObjectIndex>-1){
-        likeObject= {...requiredPost.likes[likeObjectIndex], userId:req.body.userId , count:requiredPost.likes[likeObjectIndex].count + 1}
-        requiredPost.likes[likeObjectIndex] = likeObject
-    }
-    else {
-        likeObject = {userId:req.body.userId, count:1}
-        requiredPost.likes.push(likeObject)
-    }
-    requiredPost.save()
-    // Post.updateOne((item) => {item._id === req.body.postId})
-    // (
-    //     (err, result) => {
-    //         console.log("err", err)
-    //         if (err) {
-    //             return res.status(400).json({
-    //                 error: err
-    //             });
-    //         } else {
-    //             res.json(result);
-    //         }
-    //     }
-    // );
-    if (error) {
-        console.log("err", error)
-        return res.status(400).json({
-       error: error
-
-        });
-    } else {
-        res.json(requiredPost);
-    }
- })
+    Post.findByIdAndUpdate(req.body.postId, { $push: { likes: like } }, { new: true })
+    .populate('likes.likedBy', '_id firstName lastName profileImageUrl')
+ 
+    .exec((err, result) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            });
+        } else {
+            res.json(result);
+        }
+    });
+ 
 
 };
 
