@@ -3,10 +3,12 @@ const formidable = require('formidable');
 const fs = require('fs');
 const _ = require('lodash');
 const { uploadFileTos3, uploadVideoTos3 } = require('./videoupload');
+const { LoginTicket } = require('google-auth-library');
 
 exports.postById = (req, res, next, id) => {
     Post.findById(id)
         .populate('postedBy', '_id firstName lastName')
+        .populate('likes.likedBy', '_id firstName lastName profileImageUrl')
         .populate('comments.postedBy', '_id firstName lastName profileImageUrl')
         .populate('postedBy', '_id firstName lastName role')
         .select('_id title body created likes comments photo')
@@ -198,6 +200,7 @@ exports.photo = (req, res, next) => {
 };
 
 exports.singlePost = (req, res) => {
+ 
     return res.json(req.post);
 };
 
