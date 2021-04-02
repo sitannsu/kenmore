@@ -230,9 +230,12 @@ exports.like = (req, res) => {
            // console.log("sender.name", req.body.senderUserId);
             console.log("receiver.playerId",receiver.playerId);
             var message = {
+                
                 app_id: "2fda0b56-2f68-426c-8b70-8990d7817d1b",
                 contents: { "en": `${sender.firstName} ${sender.lastName} likes your post` },
-                include_player_ids: [receiver.playerId] //'deb66713-0913-461a-a330-a67edb5fafb4'
+                include_player_ids: [receiver.playerId], //'deb66713-0913-461a-a330-a67edb5fafb4'
+                data:{ profileImageUrl:sender.profileImageUrl,}
+               
             };
             sendNotification(message, res, result);
 
@@ -299,19 +302,6 @@ if(req.body.userId === null ||req.body.postId=== null ){
             }
         });
 };
-
-exports.commentComment = (req, res) => {
-
-
-};
-
-
-
-
-
-
-
-
 
 
 exports.likeComment = (req, res) => {

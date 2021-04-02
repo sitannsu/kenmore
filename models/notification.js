@@ -24,6 +24,9 @@ const notificationSchema = new mongoose.Schema({
     isRead: {
         type: Boolean
     },
+    profileImageUrl:{
+        type: String
+    },
     timestamp: {
         type: String
     }
