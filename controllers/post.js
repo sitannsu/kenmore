@@ -2,6 +2,8 @@ const Post = require('../models/post');
 const formidable = require('formidable');
 const fs = require('fs');
 const _ = require('lodash');
+const User = require('../models/user');
+const {sendNotification} = require("../utility")
 const { uploadFileTos3, uploadVideoTos3 } = require('./videoupload');
 const { LoginTicket } = require('google-auth-library');
 
@@ -211,13 +213,30 @@ exports.like = (req, res) => {
     Post.findByIdAndUpdate(req.body.postId, { $push: { likes: like } }, { new: true })
     .populate('likes.likedBy', '_id firstName lastName profileImageUrl')
  
-    .exec((err, result) => {
+    .exec(async(err, result) => {
         if (err) {
             return res.status(400).json({
                 error: err
             });
         } else {
-            res.json(result);
+        
+            const receiverPost = await Post.findOne({ _id:  req.body.postId })
+            //.postedBy
+            //.postedBy._id;
+            console.log("receiverUserId",receiverPost.postedBy)
+            const receiver =   await User.findOne({ _id: receiverPost.postedBy });
+            console.log("receiver",receiver)
+            const sender = await User.findOne({ _id: req.body.userId });
+           // console.log("sender.name", req.body.senderUserId);
+            console.log("receiver.playerId",receiver.playerId);
+            var message = {
+                app_id: "2fda0b56-2f68-426c-8b70-8990d7817d1b",
+                contents: { "en": `${sender.firstName} ${sender.lastName} likes your post` },
+                include_player_ids: [receiver.playerId] //'deb66713-0913-461a-a330-a67edb5fafb4'
+            };
+            sendNotification(message, res, result);
+
+           // res.json(result);
         }
     });
  
