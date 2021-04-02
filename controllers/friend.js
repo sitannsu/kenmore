@@ -14,10 +14,11 @@ exports.requestFriend =  (req, res) => {
         }
             const receiver = await User.findOne({ _id:  req.body.receiverUserId });
                 const sender = await User.findOne({ _id: req.body.senderUserId });
-                console.log("api invoked");
+                console.log("sender.name", req.body.senderUserId);
+                console.log("receiver.playerId",receiver.playerId);
                 var message = {
                     app_id: "2fda0b56-2f68-426c-8b70-8990d7817d1b",
-                    contents: { "en": `${sender.name} sent you a friend request` },
+                    contents: { "en": `${sender.firstName} ${sender.lastName} sent you a friend request` },
                     include_player_ids: [receiver.playerId] //'deb66713-0913-461a-a330-a67edb5fafb4'
                 };
                 sendNotification(message, res, result);
