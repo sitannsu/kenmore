@@ -44,7 +44,8 @@ exports.allUsers = (req, res) => {
                 error: err
             });
         }
-        res.json(users);
+        console.log("filtered users",users.filter(x=>x.type?x.type!=='page':true))
+        res.json(users.filter(x=>x.type?x.type!=='page':true));
     })
         .select('_id firstName lastName email address liveLocation dob studiedAt worksAt profileImageUrl visitedUsers testimonialUser fcmToken playerId hashed_password updated created role following followers friends profileDescription coverImageUrl');
 };

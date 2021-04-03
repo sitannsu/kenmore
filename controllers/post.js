@@ -2,11 +2,15 @@ const Post = require('../models/post');
 const formidable = require('formidable');
 const fs = require('fs');
 const _ = require('lodash');
+const User = require('../models/user');
+const {sendNotification} = require("../utility")
 const { uploadFileTos3, uploadVideoTos3 } = require('./videoupload');
+const { LoginTicket } = require('google-auth-library');
 
 exports.postById = (req, res, next, id) => {
     Post.findById(id)
         .populate('postedBy', '_id firstName lastName')
+        .populate('likes.likedBy', '_id firstName lastName profileImageUrl')
         .populate('comments.postedBy', '_id firstName lastName profileImageUrl')
         .populate('postedBy', '_id firstName lastName role')
         .select('_id title body created likes comments photo')
@@ -103,6 +107,7 @@ catch(error) {
 exports.postsByUser = (req, res) => {
     Post.find({ postedBy: req.profile._id })
         .populate('postedBy', '_id firstName lastName')
+        .populate('likedBy', '_id firstName lastName')
         .populate('comments', 'text created')
         .select('_id title body created likes photo')
         .sort('_created')
@@ -197,24 +202,61 @@ exports.photo = (req, res, next) => {
 };
 
 exports.singlePost = (req, res) => {
+ 
     return res.json(req.post);
 };
 
 exports.like = (req, res) => {
+    let like = req.body;
+    like.likedBy = req.body.userId;
+
+    Post.findByIdAndUpdate(req.body.postId, { $push: { likes: like } }, { new: true })
+    .populate('likes.likedBy', '_id firstName lastName profileImageUrl')
+ 
+    .exec(async(err, result) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            });
+        } else {
+        
+            const receiverPost = await Post.findOne({ _id:  req.body.postId })
+            //.postedBy
+            //.postedBy._id;
+            console.log("receiverUserId",receiverPost.postedBy)
+            const receiver =   await User.findOne({ _id: receiverPost.postedBy });
+            console.log("receiver",receiver)
+            const sender = await User.findOne({ _id: req.body.userId });
+           // console.log("sender.name", req.body.senderUserId);
+            console.log("receiver.playerId",receiver.playerId);
+            var message = {
+                
+                app_id: "2fda0b56-2f68-426c-8b70-8990d7817d1b",
+                contents: { "en": `${sender.firstName} ${sender.lastName} likes your post` },
+                include_player_ids: [receiver.playerId], //'deb66713-0913-461a-a330-a67edb5fafb4'
+                data:{ profileImageUrl:sender.profileImageUrl,senderUserId:sender._id}
+               
+            };
+            sendNotification(message, res, result);
+
+           // res.json(result);
+        }
+    });
+ 
+
+};
+
+exports.unlike = (req, res) => {
     console.log("body", req.body)
     Post.findById(req.body.postId, (error, requiredPost)=>{
      let likeObjectIndex = requiredPost? requiredPost.likes.findIndex(item => {
     return item.userId === req.body.userId
      }):-1;
 
-    if(likeObjectIndex>-1){
-        likeObject= {...requiredPost.likes[likeObjectIndex], userId:req.body.userId , count:requiredPost.likes[likeObjectIndex].count + 1}
-        requiredPost.likes[likeObjectIndex] = likeObject
-    }
-    else {
-        likeObject = {userId:req.body.userId, count:1}
-        requiredPost.likes.push(likeObject)
-    }
+     likeObject = requiredPost.likes.filter(function(el) { return el.userId != req.body.userId });
+     requiredPost.likes = likeObject
+   
+    
     requiredPost.save()
     // Post.updateOne((item) => {item._id === req.body.postId})
     // (
@@ -239,21 +281,6 @@ exports.like = (req, res) => {
         res.json(requiredPost);
     }
  })
-
-};
-
-exports.unlike = (req, res) => {
-    Post.findByIdAndUpdate(req.body.postId, { $pull: { likes: req.body.userId } }, { new: true }).exec(
-        (err, result) => {
-            if (err) {
-                return res.status(400).json({
-                    error: err
-                });
-            } else {
-                res.json(result);
-            }
-        }
-    );
 };
 
 exports.comment = (req, res) => {
@@ -265,16 +292,35 @@ if(req.body.userId === null ||req.body.postId=== null ){
     Post.findByIdAndUpdate(req.body.postId, { $push: { comments: comment } }, { new: true })
         .populate('comments.postedBy', '_id name')
         .populate('postedBy', '_id name')
-        .exec((err, result) => {
+        .exec(async(err, result) => {
             if (err) {
                 return res.status(400).json({
                     error: err
                 });
             } else {
-                res.json(result);
+                const receiverPost = await Post.findOne({ _id:  req.body.postId })
+                //.postedBy
+                //.postedBy._id;
+                console.log("receiverUserId",receiverPost.postedBy)
+                const receiver =   await User.findOne({ _id: receiverPost.postedBy });
+                console.log("receiver",receiver)
+                const sender = await User.findOne({ _id: req.body.userId });
+               // console.log("sender.name", req.body.senderUserId);
+                console.log("receiver.playerId",receiver.playerId);
+                var message = {
+                    
+                    app_id: "2fda0b56-2f68-426c-8b70-8990d7817d1b",
+                    contents: { "en": `${sender.firstName} ${sender.lastName} commented on your post.` },
+                    include_player_ids: [receiver.playerId], //'deb66713-0913-461a-a330-a67edb5fafb4'
+                    data:{ profileImageUrl:sender.profileImageUrl,senderUserId:sender._id}
+                   
+                };
+                sendNotification(message, res, result);
+             
             }
         });
 };
+
 
 exports.likeComment = (req, res) => {
     console.log("body", req.body)
@@ -308,6 +354,7 @@ exports.likeComment = (req, res) => {
     }
 })
 };
+
 exports.disslikeComment = (req, res) => {
     console.log("body", req.body)
     Post.findById(req.body.postId, (error, requiredPost)=>{
@@ -340,37 +387,6 @@ exports.disslikeComment = (req, res) => {
     }
 })
 };
-
-// exports.likeComment = (req, res) => {
-//     console.log("body", req.body)
-//     Post.findById(req.body.postId, (error, requiredPost)=>{
-//      let likeObjectIndex = requiredPost? requiredPost.comments[0].likes.findIndex(item => {
-//     return item.userId === req.body.userId
-//      }):-1;
-//      requiredPost.comments.findById(req.body.postId, (error, requiredPost)=>{
-//         let likeObjectIndex = requiredPost? requiredPost.comments[0].likes.findIndex(item => {
-//        return item.userId === req.body.userId
-//         }):-1;
-// //     if(likeObjectIndex>-1){
-// //         likeObject= {...requiredPost.comments[0].likes[likeObjectIndex], userId:req.body.userId , count:requiredPost.comments[0].likes[likeObjectIndex].count + 1}
-// //         requiredPost.comments[0].likes[likeObjectIndex] = likeObject
-// //     }
-// //     else {
-// //         likeObject = {userId:req.body.userId, count:1}
-// //         requiredPost.comments[0].likes.push(likeObject)
-// //     }
-// //     requiredPost.save()
-// //       if (error) {
-// //         console.log("err", error)
-// //         return res.status(400).json({
-// //        error: error
-
-// //         });
-// //     } else {
-// //         res.json(requiredPost);
-// //     }
-//  })
-// };
 
 exports.uncomment = (req, res) => {
     let comment = req.body.comment;

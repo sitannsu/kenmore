@@ -55,6 +55,8 @@ const friendRoutes = require('./routes/friend');
 const chatRoutes = require('./routes/chat');
 const videoRoutes = require('./routes/videoupload')
 const Notification = require('./routes/notification')
+const pageRoutes = require('./routes/page')
+
 //const notificationRoutes = require('./routes/pushNotification')
 //const notifiRoutes = require('./routes/notification');
 //const userAddClick = require('./routes/userAddClick');
@@ -94,6 +96,7 @@ app.use('/api', friendRoutes);
 app.use('/api', chatRoutes);
 app.use('/api', videoRoutes);
 app.use('/api', Notification);
+app.use('/api', pageRoutes);
 
 
 // app.use(function (err, req, res, next) {

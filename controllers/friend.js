@@ -14,16 +14,48 @@ exports.requestFriend =  (req, res) => {
         }
             const receiver = await User.findOne({ _id:  req.body.receiverUserId });
                 const sender = await User.findOne({ _id: req.body.senderUserId });
-                console.log("api invoked");
+                console.log("sender.name", req.body.senderUserId);
+                console.log("receiver.playerId",receiver.playerId);
+                console.log("result",result.friend.status)
+                var contentMsg = {}
+               if( result.friend.status== 'pending'){
+               contentMsg = {"en":`${sender.firstName} ${sender.lastName} sent you a friend request`}
+               }
+              if(result.friend.status== 'accepted'){
+                contentMsg = {"en":`${sender.firstName} ${sender.lastName} accepted your friend request`} 
+              }
                 var message = {
-                    app_id: "4caa225e-a77d-485c-bbc5-74e432aa6e2f",
-                    contents: { "en": `${sender.name} sent you a friend request` },
-                    include_player_ids: [receiver.playerId] //'deb66713-0913-461a-a330-a67edb5fafb4'
+                    app_id: "2fda0b56-2f68-426c-8b70-8990d7817d1b",
+                    contents:  contentMsg ,
+                    include_player_ids: [receiver.playerId] ,//'deb66713-0913-461a-a330-a67edb5fafb4'
+                    data:{ profileImageUrl:sender.profileImageUrl,senderUserId:sender._id}
                 };
                 sendNotification(message, res, result);
     });
 };
+exports.getAccepted =(req,res)=>{
+    console.log("api started")
+    User.findOne({ _id:req.body.userID }, (err, user) => {
+        // if err or no user
+        if (err || !user) {
+            return res.status(401).json({
+                error: 'user id not exist'
+            });
+        }
+       // console.log("user",user)
+ var Status = require("mongoose-friends").Status;
+ User.getFriends({ _id:req.body.userID }, function (err, friendships) {
+    if (err) {
+        return res.status(400).json({
+            error: err
+        });
+    }
+    res.json(friendships.filter(x=>x.status=="accepted"));
+});
+       
+    });
 
+}
 
 
 exports.getFriends = (req, res) => {

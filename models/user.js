@@ -131,8 +131,30 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-
-   
+    type:{
+        type:String,
+        default:""
+    },
+    pageTitle:{
+        type:String,
+        default:""
+    },
+    pageName:{
+        type:String,
+        default:""
+    },
+    pageDescription:{
+        type:String,
+        default:""
+    },
+    createdAt:{
+        type: Date, 
+        default: Date.now 
+    },
+    updatedAt:{
+        type: Date, 
+        default: Date.now 
+    },
     following: [{ type: ObjectId, ref: "User" }],
     followers: [{ type: ObjectId, ref: "User" }],
     resetPasswordLink: {
