@@ -155,6 +155,11 @@ const userSchema = new mongoose.Schema({
         type: Date, 
         default: Date.now 
     },
+    createdBy:{
+        type: ObjectId, 
+        ref:"User"
+    },
+    
     following: [{ type: ObjectId, ref: "User" }],
     followers: [{ type: ObjectId, ref: "User" }],
     resetPasswordLink: {

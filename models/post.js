@@ -35,7 +35,11 @@ const postSchema = new mongoose.Schema({
     comments: [
         {
             text: String,
-            parentCommentId:[ { commentId:String  }],
+            parentCommentId: { 
+            type:String ,
+            default:""
+            
+            },
             created: { type: Date, default: Date.now },
             postedBy: { type: ObjectId, ref: 'User' },
             comments: [
