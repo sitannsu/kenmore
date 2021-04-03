@@ -38,7 +38,7 @@ exports.getFriends = (req, res) => {
     });
 }
 
-exports.removeFriend = (req, res) => {
+ exports.removeFriend = (req, res) => {
     //console.log(req);
     var user1Id = new ObjectId(req.body.senderUserId);
     var user2Id = new ObjectId(req.body.receiverUserId);
