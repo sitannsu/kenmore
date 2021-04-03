@@ -81,13 +81,15 @@ exports.createPost = async (req, res, next) => {
         req.profile.salt = undefined;
         post.postedBy = req.profile;
         
-        if (req.file) {
+        if (req.files) {
             // post.photo.data = fs.readFileSync(files.photo.path);
             // post.photo.contentType = files.photo.type;
-          
-                 imageUrl =  await uploadFileTos3('images',req.file)
-                 console.log("imageurl", imageUrl);
-                 post.photo= imageUrl.url;
+            for(var i=0; i<req.files.length; i++){
+                imageUrl =  await uploadFileTos3('images',req.files[i])
+                console.log("imageurl", req.files[i]);
+                post.photo.push(imageUrl.url);
+            }
+                 
                               
         }
         post.save((err, result) => {

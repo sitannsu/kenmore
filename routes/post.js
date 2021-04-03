@@ -23,7 +23,7 @@ const { createPostValidator } = require('../validator');
 const multer = require('multer')
 const inMemoryStorage = multer.memoryStorage();
 const singleFileUpload = multer({ storage: inMemoryStorage });
-
+var upload = multer({ storage: inMemoryStorage });
 const router = express.Router();
 
 router.get('/posts', getPosts);
@@ -40,7 +40,7 @@ router.put('/post/uncomment', requireSignin, uncomment);
 router.put('/post/updatecomment', requireSignin, updateComment);
 
 // post routes
-router.post('/post/new/:userId',requireSignin,singleFileUpload.single('photo'),  createPost);
+router.post('/post/new/:userId',requireSignin, upload.array('photo', 10),  createPost);
 router.get('/posts/by/:userId', requireSignin, postsByUser);
 router.get('/post/:postId', singlePost);
 router.put('/post/:postId', requireSignin, isPoster, updatePost);
