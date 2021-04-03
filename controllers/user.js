@@ -112,16 +112,7 @@ exports.getUser = (req, res) => {
 
 exports.updateUser = async (req, res) => {
     console.log("API startted");
-    //console.log("reqq", req.file);
-    //let form = new formidable.IncomingForm();
-   // console.log("incoming form data: ", form);
-  //  form.keepExtensions = true;
-    // form.parse(req, (err, fields, files) => {
-    // if (err) {
-    //     return res.status(400).json({
-    //         error: 'Photo could not be uploaded'
-    //     });
-    // }
+
     // save user
     let user = req.profile;
     console.log("user in update: ", user);
@@ -130,15 +121,7 @@ exports.updateUser = async (req, res) => {
     user.updated = Date.now();
      console.log("USER FORM DATA UPDATE: ", user);
 
-    // if (req.file) {
-    //     imageUrl =  await uploadFileTos3('images',req.file)
-        
-    //     console.log("imageurl", imageUrl);
-    //     //user.photo= imageUrl.url;
-    //     user.profileImageUrl= imageUrl.url;
-    //     // user.photo.data = fs.readFileSync(files.photo.path);
-    //     // user.photo.contentType = files.photo.type;
-    // }
+
 
     user.save((err, result) => {
         if (err) {
