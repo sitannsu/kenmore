@@ -234,7 +234,7 @@ exports.like = (req, res) => {
                 app_id: "2fda0b56-2f68-426c-8b70-8990d7817d1b",
                 contents: { "en": `${sender.firstName} ${sender.lastName} likes your post` },
                 include_player_ids: [receiver.playerId], //'deb66713-0913-461a-a330-a67edb5fafb4'
-                data:{ profileImageUrl:sender.profileImageUrl,}
+                data:{ profileImageUrl:sender.profileImageUrl,senderUserId:sender._id}
                
             };
             sendNotification(message, res, result);
@@ -292,13 +292,31 @@ if(req.body.userId === null ||req.body.postId=== null ){
     Post.findByIdAndUpdate(req.body.postId, { $push: { comments: comment } }, { new: true })
         .populate('comments.postedBy', '_id name')
         .populate('postedBy', '_id name')
-        .exec((err, result) => {
+        .exec(async(err, result) => {
             if (err) {
                 return res.status(400).json({
                     error: err
                 });
             } else {
-                res.json(result);
+                const receiverPost = await Post.findOne({ _id:  req.body.postId })
+                //.postedBy
+                //.postedBy._id;
+                console.log("receiverUserId",receiverPost.postedBy)
+                const receiver =   await User.findOne({ _id: receiverPost.postedBy });
+                console.log("receiver",receiver)
+                const sender = await User.findOne({ _id: req.body.userId });
+               // console.log("sender.name", req.body.senderUserId);
+                console.log("receiver.playerId",receiver.playerId);
+                var message = {
+                    
+                    app_id: "2fda0b56-2f68-426c-8b70-8990d7817d1b",
+                    contents: { "en": `${sender.firstName} ${sender.lastName} commented on your post.` },
+                    include_player_ids: [receiver.playerId], //'deb66713-0913-461a-a330-a67edb5fafb4'
+                    data:{ profileImageUrl:sender.profileImageUrl,senderUserId:sender._id}
+                   
+                };
+                sendNotification(message, res, result);
+             
             }
         });
 };
@@ -336,6 +354,7 @@ exports.likeComment = (req, res) => {
     }
 })
 };
+
 exports.disslikeComment = (req, res) => {
     console.log("body", req.body)
     Post.findById(req.body.postId, (error, requiredPost)=>{
@@ -368,8 +387,6 @@ exports.disslikeComment = (req, res) => {
     }
 })
 };
-
-
 
 exports.uncomment = (req, res) => {
     let comment = req.body.comment;

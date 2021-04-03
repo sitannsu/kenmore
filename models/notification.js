@@ -27,6 +27,9 @@ const notificationSchema = new mongoose.Schema({
     profileImageUrl:{
         type: String
     },
+    senderUserId:{
+        type: String
+    },
     timestamp: {
         type: String
     }

@@ -16,10 +16,19 @@ exports.requestFriend =  (req, res) => {
                 const sender = await User.findOne({ _id: req.body.senderUserId });
                 console.log("sender.name", req.body.senderUserId);
                 console.log("receiver.playerId",receiver.playerId);
+                console.log("result",result.friend.status)
+                var contentMsg = {}
+               if( result.friend.status== 'pending'){
+               contentMsg = {"en":`${sender.firstName} ${sender.lastName} sent you a friend request`}
+               }
+              if(result.friend.status== 'accepted'){
+                contentMsg = {"en":`${sender.firstName} ${sender.lastName} accepted your friend request`} 
+              }
                 var message = {
                     app_id: "2fda0b56-2f68-426c-8b70-8990d7817d1b",
-                    contents: { "en": `${sender.firstName} ${sender.lastName} sent you a friend request` },
-                    include_player_ids: [receiver.playerId] //'deb66713-0913-461a-a330-a67edb5fafb4'
+                    contents:  contentMsg ,
+                    include_player_ids: [receiver.playerId] ,//'deb66713-0913-461a-a330-a67edb5fafb4'
+                    data:{ profileImageUrl:sender.profileImageUrl,senderUserId:sender._id}
                 };
                 sendNotification(message, res, result);
     });
