@@ -124,15 +124,18 @@ exports.postsByUser = (req, res) => {
 };
 
 exports.isPoster = (req, res, next) => {
+ 
+ 
     let sameUser = req.post && req.auth && req.post.postedBy._id == req.auth._id;
     let adminUser = req.post && req.auth && req.auth.role === 'admin';
 
     // console.log("req.post ", req.post, " req.auth ", req.auth);
     // console.log("SAMEUSER: ", sameUser, " ADMINUSER: ", adminUser);
 
-    let isPoster = sameUser || adminUser;
+    let isPoster = (req.body.userId.toString=== req.post.postedBy._id.toString) ? false: true;
+    console.log("isPosterisPoster",isPoster);
 
-    if (!isPoster) {
+    if (req.body.userId.toString()!== req.post.postedBy._id.toString()) {
         return res.status(403).json({
             error: 'User is not authorized'
         });
@@ -305,7 +308,7 @@ if(req.body.userId === null ||req.body.postId=== null ){
                 //.postedBy._id;
                 console.log("receiverUserId",receiverPost.postedBy)
                 const receiver =   await User.findOne({ _id: receiverPost.postedBy });
-                console.log("receiver",receiver)
+                //console.log("receiver",receiver)
                 const sender = await User.findOne({ _id: req.body.userId });
                // console.log("sender.name", req.body.senderUserId);
                 console.log("receiver.playerId",receiver.playerId);
@@ -317,7 +320,14 @@ if(req.body.userId === null ||req.body.postId=== null ){
                     data:{ profileImageUrl:sender.profileImageUrl,senderUserId:sender._id}
                    
                 };
-                sendNotification(message, res, result);
+                if(receiverPost.postedBy.toString() ===req.body.userId.toString() ){
+                   //res.json(result);
+                   res.status(200).json(result);
+                }else{
+                    
+                    sendNotification(message, res, result);
+                }
+                
              
             }
         });
@@ -391,9 +401,9 @@ exports.disslikeComment = (req, res) => {
 };
 
 exports.uncomment = (req, res) => {
-    let comment = req.body.comment;
+ 
 
-    Post.findByIdAndUpdate(req.body.postId, { $pull: { comments: { _id: comment._id } } }, { new: true })
+    Post.findByIdAndUpdate(req.body.postId, { $pull: { comments: { _id: req.body.commentId} } } )
         .populate('comments.postedBy', '_id name')
         .populate('postedBy', '_id name')
         .exec((err, result) => {
