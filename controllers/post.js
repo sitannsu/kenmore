@@ -171,9 +171,20 @@ exports.updatePost = (req, res, next) => {
         post = _.extend(post, fields);
         post.updated = Date.now();
 
-        if (files.photo) {
-            post.photo.data = fs.readFileSync(files.photo.path);
-            post.photo.contentType = files.photo.type;
+        // if (files.photo) {
+        //     post.photo.data = fs.readFileSync(files.photo.path);
+        //     post.photo.contentType = files.photo.type;
+        // }
+        if (req.files) {
+            // post.photo.data = fs.readFileSync(files.photo.path);
+            // post.photo.contentType = files.photo.type;
+            for(var i=0; i<req.files.length; i++){
+                imageUrl =  await uploadFileTos3('images',req.files[i])
+                console.log("imageurl", req.files[i]);
+                post.photo.push(imageUrl.url);
+            }
+                 
+                              
         }
 
         post.save((err, result) => {
