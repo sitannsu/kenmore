@@ -44,7 +44,7 @@ router.post('/post/new/:userId',requireSignin, upload.array('photo', 10),  creat
 router.get('/posts/by/:userId', requireSignin, postsByUser);
 router.get('/post/:postId', singlePost);
 router.put('/post/:postId', requireSignin, isPoster, updatePost);
-router.delete('/post/:postId', requireSignin, isPoster, deletePost);
+router.post('/post/delete/:postId', requireSignin, isPoster, deletePost);
 
 //router.delete('/post/comment/:commentId', requireSignin, isPoster, deletePost);
 
