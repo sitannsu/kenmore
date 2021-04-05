@@ -123,6 +123,25 @@ exports.postsByUser = (req, res) => {
         });
 };
 
+exports.postSearchByKeyword = (req, res) => {
+    Post.find({ "$text" : { "$search" : "\"Pankaj\""} })
+        .populate('postedBy', '_id firstName lastName')
+        .populate('likedBy', '_id firstName lastName')
+        .populate('comments', 'text created')
+        .select('_id title body created likes photo')
+        .sort('_created')
+        .exec((err, posts) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            res.json(posts);
+        });
+
+        
+};
+
 exports.isPoster = (req, res, next) => {
  
  
@@ -237,6 +256,7 @@ exports.photo = (req, res, next) => {
 
 exports.singlePost = (req, res) => {
  
+ 
     return res.json(req.post);
 };
 
@@ -320,6 +340,7 @@ exports.unlike = (req, res) => {
 exports.comment = (req, res) => {
     let comment = {text:req.body.comment};
     comment.postedBy = req.body.userId;
+    comment.parentCommentId = req.body.parentCommentId;
 if(req.body.userId === null ||req.body.postId=== null ){
     res.status(500).json({message:'Post ID or User Id is missing'})
 }

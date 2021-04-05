@@ -3,12 +3,14 @@ const User = require('../models/user');
 const formidable = require('formidable');
 const fs = require('fs');
 const { uploadFileTos3 } = require('./videoupload');
+const profilevisit = require('../models/profilevisit');
 
 exports.userById = (req, res, next, id) => {
     User.findById(id)
         // populate followers and following users array
         .populate('following', '_id name')
         .populate('followers', '_id name')
+        .populate('testimonialUsers', '_id name profileImageUrl firstName lastName')
         .exec((err, user) => {
             if (err || !user) {
                 return res.status(400).json({
@@ -53,7 +55,15 @@ exports.allUsers = (req, res) => {
 exports.getUser = (req, res) => {
     req.profile.hashed_password = undefined;
     req.profile.salt = undefined;
-    return res.json(req.profile);
+    profilevisit.find({userId:req.profile._id }, (err, profileVsit)=> {
+        if(err){
+            res.status(500).json({msg:"Error "})
+        }
+
+        req.profile.visitCount = profileVsit.length;
+        return res.json(req.profile);
+    })
+    //return res.json(req.profile);
 };
 
 // exports.updateUser = (req, res, next) => {
@@ -160,6 +170,37 @@ exports.visitedUsers = (req, res) => {
             });
         }
         user.visitedUsers.push({userId:req.body.visitedUserId, visitedTime:req.body.userVisitedTime})
+        user.save((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            res.json(user);
+        });
+    });
+
+    };
+
+
+     // Visited Users
+exports.addTestimonial = (req, res) => {
+    let userTobeAdded = {};
+    userTobeAdded.profileImageUrl = req.profile.profileImageUrl;
+    userTobeAdded._id = req.profile._id;
+    userTobeAdded.firstName = req.profile.firstName;
+    userTobeAdded.lastName = req.profile.lastName;
+    
+    User.findOne({ _id:req.body.userId}, (err, user) => {
+        // if err or no user
+        if (err || !user){
+            return res.status('401').json({
+                error: 'User with that id does not exist!'
+            });
+        }
+        user.testimonialUsers.push({userId:req.body.userId, testimonialText:req.body.testimonialText,
+            postedBy:userTobeAdded})
+            //console.log("userTobeAddeduserTobeAdded",user);    
         user.save((err, result) => {
             if (err) {
                 return res.status(400).json({
