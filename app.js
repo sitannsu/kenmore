@@ -58,6 +58,7 @@ const videoRoutes = require('./routes/videoupload')
 const Notification = require('./routes/notification')
 const pageRoutes = require('./routes/page')
 const profileVisitRoute = require('./routes/profilevisit')
+const testiMonial = require('./routes/testimonial')
 
 //const notificationRoutes = require('./routes/pushNotification')
 //const notifiRoutes = require('./routes/notification');
@@ -100,6 +101,7 @@ app.use('/api', videoRoutes);
 app.use('/api', Notification);
 app.use('/api', pageRoutes);
 app.use('/api', profileVisitRoute);
+app.use('/api', testiMonial);
 
 
 // app.use(function (err, req, res, next) {
