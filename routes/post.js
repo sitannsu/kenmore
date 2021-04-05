@@ -15,7 +15,9 @@ const {
     unlike,
     comment,
     uncomment,
-    updateComment
+    updateComment,
+    searchPost
+    
 } = require('../controllers/post');
 const { requireSignin } = require('../controllers/auth');
 const { userById } = require('../controllers/user');
@@ -45,6 +47,8 @@ router.get('/posts/by/:userId', requireSignin, postsByUser);
 router.get('/post/:postId', singlePost);
 router.put('/post/:postId', requireSignin, isPoster, updatePost);
 router.post('/post/delete/:postId', requireSignin, isPoster, deletePost);
+
+//router.post('/post/search', requireSignin, searchPost);
 
 //router.delete('/post/comment/:commentId', requireSignin, isPoster, deletePost);
 
