@@ -16,7 +16,7 @@ const {
     comment,
     uncomment,
     updateComment,
-    searchPost
+    postSearchByKeyword
     
 } = require('../controllers/post');
 const { requireSignin } = require('../controllers/auth');
@@ -48,7 +48,7 @@ router.get('/post/:postId', singlePost);
 router.put('/post/:postId', requireSignin, isPoster, updatePost);
 router.post('/post/delete/:postId', requireSignin, isPoster, deletePost);
 
-//router.post('/post/search', requireSignin, searchPost);
+router.post('/post/search', requireSignin, postSearchByKeyword);
 
 //router.delete('/post/comment/:commentId', requireSignin, isPoster, deletePost);
 

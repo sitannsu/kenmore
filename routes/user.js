@@ -15,7 +15,8 @@ const {
     allVisitedUsers,
     testimonialUser,
     hasAuthorization,
-    uploadImage
+    uploadImage,
+    addTestimonial
 } = require("../controllers/user");
 const { requireSignin } = require("../controllers/auth");
 const multer = require('multer')
@@ -41,6 +42,8 @@ router.get("/user/photo/:userId", userPhoto);
 // Visited Users
 router.put("/user/visitprofile/:userId", visitedUsers);
 router.get("/user/allvisitedusers/:userId",  allVisitedUsers);
+
+router.put("/user/addTestimonial/:userId", addTestimonial);
 
 // Testimonial
 router.put("/testimonialUser/:userId", testimonialUser);

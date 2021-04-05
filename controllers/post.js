@@ -124,7 +124,7 @@ exports.postsByUser = (req, res) => {
 };
 
 exports.postSearchByKeyword = (req, res) => {
-    Post.find({ "$text" : { "$search" : req.body.searchText} })
+    Post.find({ "$text" : { "$search" : "\"Pankaj\""} })
         .populate('postedBy', '_id firstName lastName')
         .populate('likedBy', '_id firstName lastName')
         .populate('comments', 'text created')
