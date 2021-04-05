@@ -4,7 +4,7 @@ const Testimonial = require("../models/testimonial");
  
 
 exports.getAllTestimonial = async (req, res) => {
-    Testimonial.find({ userId: req.body.userId })
+    Testimonial.find({ userId: req.params.userId })
     .populate('visitedBy', '_id firstName lastName profileImageUrl')
     .populate('likedBy', '_id firstName lastName')
    
