@@ -176,34 +176,63 @@ exports.isPoster = (req, res, next) => {
 //     });
 // };
 
-exports.updatePost = (req, res, next) => {
-    let form = new formidable.IncomingForm();
-    form.keepExtensions = true;
-    form.parse(req, (err, fields, files) => {
-        if (err) {
-            return res.status(400).json({
-                error: 'Photo could not be uploaded'
-            });
-        }
-        // save post
+exports.updatePost = async(req, res, next) => {
+    // let form = new formidable.IncomingForm();
+    // form.keepExtensions = true;
+    // form.parse(req, (err, fields, files) => {
+    //     if (err) {
+    //         return res.status(400).json({
+    //             error: 'Photo could not be uploaded'
+    //         });
+    //     }
+    //     // save post
+    //     let post = req.post;
+    //     post = _.extend(post, fields);
+    //     post.updated = Date.now();
+
+    //     if (files.photo) {
+    //         post.photo.data = fs.readFileSync(files.photo.path);
+    //         post.photo.contentType = files.photo.type;
+    //     }
+
+    //     post.save((err, result) => {
+    //         if (err) {
+    //             return res.status(400).json({
+    //                 error: err
+    //             });
+    //         }
+    //         res.json(post);
+    //     });
+    // });
+    console.log("api started")
+    try{
+        console.log("reqqq", req.file);
         let post = req.post;
-        post = _.extend(post, fields);
+        post = _.extend(post, req.body);
         post.updated = Date.now();
-
-        if (files.photo) {
-            post.photo.data = fs.readFileSync(files.photo.path);
-            post.photo.contentType = files.photo.type;
+       console.log("requested file ",req.file)
+    
+        if (req.files) {
+            for(var i=0; i<req.files.length; i++){
+                imageUrl =  await uploadFileTos3('images',req.files[i])
+                console.log("imageurl", req.files[i]);
+                post.photo.push(imageUrl.url);
+            }
+                 
+                              
         }
-
         post.save((err, result) => {
             if (err) {
                 return res.status(400).json({
                     error: err
                 });
             }
-            res.json(post);
+            res.json(result);
         });
-    });
+}
+catch(error) {
+    console.log("errror",error)
+}
 };
 
 exports.deletePost = (req, res) => {

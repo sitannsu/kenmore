@@ -1,15 +1,11 @@
-const ProfileVisit = require('../models/profilevisit');
+const Testimonial = require("../models/testimonial");
 
 
  
 
-exports.getAllProfileVisit = async (req, res) => {
-
-
-
-
-    ProfileVisit.find({ userId: req.body.userId })
-    .populate('visitedBy', '_id firstName lastName profileImageUrl')
+exports.getAllTestimonial = async (req, res) => {
+    Testimonial.find({ userId: req.params.userId })
+    .populate('postedBy', '_id firstName lastName profileImageUrl')
     .populate('likedBy', '_id firstName lastName')
    
     .sort('_created')
@@ -25,13 +21,13 @@ exports.getAllProfileVisit = async (req, res) => {
 };
 
 
-exports.insertProfileVisit = async (req, res) => {
-        
-    
-    const profileVisit = await new ProfileVisit(req.body);
+
+exports.insertTestimonial = async (req, res) => {
+     
+    const testimonial = await new Testimonial(req.body);
     console.log("profilePage",req.profile)
     //user.createdBy = req.body.userId;
-    await profileVisit.save((err, result) => {
+    await testimonial.save((err, result) => {
       
         if (err) {
             return res.status(400).json({

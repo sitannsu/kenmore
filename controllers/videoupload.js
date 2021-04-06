@@ -249,20 +249,11 @@ exports.uploadFileTos3 = ( (directoryPath, image)=>{
           }
           else{
               resolve({
-                  // filename: blobName,
-                  // originalname: file.originalname,
-                  // size: streamLength,
-                  // path: `${azureStorageConfig.containerName}/${directoryPath}/${blobName}`,
+          
                   url: `https://vanamimage.s3.us-east-2.amazonaws.com/${fileName}`
               });
           }
-          // const returnData = {
-          //   signedRequest: data,
-          //   //url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
-          //   url: `https://vanamimage.s3.amazonaws.com/${fileName}`
-          // };
-          // res.write(JSON.stringify(returnData));
-          // res.end();
+    
         });
       
 })
@@ -292,7 +283,7 @@ s3bucket.upload(params, function (err, data) {
         if (err) {
           resolve({ "error": true, "Message": err});
         }else{
-            ResponseData.push(data.Location);
+            ResponseData.push(data);
             if(ResponseData.length == file.length){
               resolve({  url: ResponseData});
             }

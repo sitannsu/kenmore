@@ -162,7 +162,7 @@ const userSchema = new mongoose.Schema({
         type: ObjectId, 
         ref:"User"
     },
-    testimonialUsers: [ { userId:String ,testimonialText: String, postedBy: { type: ObjectId }  } ],
+    
     following: [{ type: ObjectId, ref: "User" }],
     followers: [{ type: ObjectId, ref: "User" }],
     resetPasswordLink: {
