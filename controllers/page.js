@@ -28,6 +28,9 @@ exports.pageUserById = (req, res, next, id) => {
             next();
         });
 };
+
+
+
 exports.createPage = async (req, res) => {
    if(!req.body.pageName || !req.body.pageDescription || !req.body.pageTitle || !req.params.pageUserId) {
     return res.status(400).json({
@@ -57,7 +60,7 @@ exports.createPage = async (req, res) => {
 };
 
 exports.allPagesForUser = (req, res) => {
-    User.find((err, users) => {
+    User.find({createdBy:req.params.pageUserId},(err, users) => {
         if (err) {
             return res.status(400).json({
                 error: err
