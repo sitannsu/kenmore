@@ -266,9 +266,6 @@ exports.sendOtp = async (req,res)=>{
 
     });
      
-
-
-
   }
 exports.verifyOtp = (req,res)=>{
     axios.get(`https://2factor.in/API/V1/eec85aaf-8a1f-11eb-a9bc-0200cd936042/SMS/VERIFY/${req.body.sessionID}/${req.body.otp}`)
