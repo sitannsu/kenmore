@@ -28,7 +28,7 @@ exports.requestFriend =  (req, res) => {
                     app_id: "2fda0b56-2f68-426c-8b70-8990d7817d1b",
                     contents:  contentMsg ,
                     include_player_ids: [receiver.playerId] ,//'deb66713-0913-461a-a330-a67edb5fafb4'
-                    data:{ profileImageUrl:sender.profileImageUrl,senderUserId:sender._id}
+                    data:{ profileImageUrl:sender.profileImageUrl,senderUserId:sender._id, type: "frequest"}
                 };
                 sendNotification(message, res, result);
     });
