@@ -60,26 +60,22 @@ exports.createPage = async (req, res) => {
 };
 
 exports.allPagesForUser = (req, res) => {
-    User.find({createdBy:req.params.pageUserId},(err, users) => {
-        if (err) {
+    User.find({createdBy:req.params.pageUserId})
+    .populate('createdBy', '_id firstName lastName profileImageUrl')
+    .select('_id pageName pageDescription type pageTitle profileImageUrl coverImageUrl createdAt createdBy updatedAt')
+    .exec((err, page) => {
+        if (err || !page) {
             return res.status(400).json({
                 error: err
             });
         }
-        console.log("filtered users",users.filter(x=>x.type&&x.type==='page'))
-        res.json(users.filter(x=>x.type&&x.type==='page'));
-        //&&x.createdBy._id===req.params.userId));
-    })
-        .populate('createdBy', '_id firstName lastName profileImageUrl')
-        .select('_id pageName pageDescription type pageTitle profileImageUrl coverImageUrl createdAt createdBy updatedAt')
-        .then(pages=>{
-
-            return res.status(200).json({
-                data:pages
-            })
+       
+        return res.status(200).json({
+            data:page.filter(x=>x.type&&x.type==='page')
         })
-        
-};
+
+    })
+}
 exports.pageById = (req, res) => {
     console.log("param ",req.params.pageID)
     User.findById({_id:req.params.pageID},(err, users) => {
