@@ -26,7 +26,7 @@ exports.sendNotifications = async (req, res) => {
                     error: err
                 });
             }
-            res.json(result);
+            res.status(200).json(result);
         });
     })
 
