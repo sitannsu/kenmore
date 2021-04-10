@@ -19,7 +19,7 @@ const client = new Client({ node: 'http://localhost:9200' ,
  
  
                 
- cron.schedule('49 * * * *', function() {
+ cron.schedule('59 * * * *', function() {
       console.log('running a task every minute');
      });
 
