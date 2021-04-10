@@ -7,6 +7,24 @@ const {sendNotification} = require("../utility")
 const { uploadFileTos3, uploadVideoTos3 } = require('./videoupload');
 const { LoginTicket } = require('google-auth-library');
 
+const cron = require('node-cron');
+
+const { Client } = require('@elastic/elasticsearch')
+const client = new Client({ node: 'http://localhost:9200' ,
+                        maxRetries: 5,
+                    requestTimeout:60000,
+                sniffOnStart:true})
+
+
+ 
+ 
+                
+ cron.schedule('49 * * * *', function() {
+      console.log('running a task every minute');
+     });
+
+
+
 exports.postById = (req, res, next, id) => {
     Post.findById(id)
         .populate('postedBy', '_id firstName lastName')
@@ -123,8 +141,8 @@ exports.postsByUser = (req, res) => {
         });
 };
 
-exports.postSearchByKeyword = (req, res) => {
-    Post.find({ "$text" : { "$search" : "\"Pankaj\""} })
+exports.postSearchByKeyword = async(req, res) => {
+   /* Post.find({ "$text" : { "$search" : "\"Pankaj\""} })
         .populate('postedBy', '_id firstName lastName')
         .populate('likedBy', '_id firstName lastName')
         .populate('comments', 'text created')
@@ -137,9 +155,55 @@ exports.postSearchByKeyword = (req, res) => {
                 });
             }
             res.json(posts);
-        });
-
+        });*/
         
+
+       /* Post.find({ "$text" : { "$search" : req.body.searchText }})
+       
+        .exec(function(err, data) {
+            res.json(data);
+        }); */
+
+
+       /*  console.log("req.body.searchText",req.body.searchText);
+        Post .search(req.body.searchText , function(err, data) {
+            if (err) {
+                console.log("errerrerrerr",err);
+            }
+            res.json(data);
+         })*/
+        
+         /*client.search({
+            index: 'my-index',
+            body: {
+              query: {
+                match: { hello: 'world' }
+              }
+            }
+          }, (err, result) => {
+            if (err) console.log(err)
+          }) */
+
+          try {
+            let result = await collection.aggregate([
+                {
+                    "$search": {
+                        "autocomplete": {
+                            "query": `${request.query.query}`,
+                            "path": "name",
+                            "fuzzy": {
+                                "maxEdits": 2,
+                                "prefixLength": 3
+                            }
+                        }
+                    }
+                }
+            ]).toArray();
+            res.send(result);
+        } catch (e) {
+            response.status(500).send({ message: e.message });
+        }
+
 };
 
 exports.isPoster = (req, res, next) => {

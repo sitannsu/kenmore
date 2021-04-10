@@ -1,5 +1,10 @@
-const mongoose = require('mongoose');
+var mongoose     = require('mongoose')
+  , mongoosastic = require('mongoosastic')
+  , Schema       = mongoose.Schema
 const { ObjectId } = mongoose.Schema;
+var textSearch = require('mongoose-partial-full-search');
+
+
 
 const postSchema = new mongoose.Schema({
     title: {
@@ -55,5 +60,7 @@ const postSchema = new mongoose.Schema({
     
     
 });
-
+//postSchema.plugin(textSearch);
+//postSchema.index({'$**': 'text'});
+postSchema.plugin(mongoosastic)
 module.exports = mongoose.model('Post', postSchema);
