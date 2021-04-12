@@ -18,7 +18,7 @@ router.get('/signout', signout);
 // then use this route for social login
 router.post('/social-login', socialLogin);
 
-
+router.post('/forgotPassword', forgotPassword);
 
 //forgot password otp 
 router.post('/sendOtp', sendOtp);
