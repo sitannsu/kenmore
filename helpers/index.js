@@ -9,8 +9,8 @@ exports.sendEmail = emailData => {
     secure: false,
     requireTLS: true,
     auth: {
-      user: "vanamikis@gmail.com",
-      pass: "vANAM@123"
+      user: "bibhu.redmi@gmail.com",
+      pass: "8908901118"
     }
   });
   return transporter
