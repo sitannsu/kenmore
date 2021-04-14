@@ -6,8 +6,8 @@ exports.sendEmail = emailData => {
   const transporter = nodeMailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
+    ignoreTLS: false,
     secure: false,
-    requireTLS: false,
     auth: {
       user: "advancedcybernetic@gmail.com",
       pass: "allinonetech2@"
