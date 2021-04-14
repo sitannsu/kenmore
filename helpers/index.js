@@ -7,7 +7,7 @@ exports.sendEmail = emailData => {
     host: "smtp.gmail.com",
     port: 587,
     secure: false,
-    requireTLS: true,
+    requireTLS: false,
     auth: {
       user: "advancedcybernetic@gmail.com",
       pass: "allinonetech2@"
