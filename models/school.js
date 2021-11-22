@@ -2,7 +2,11 @@ const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 
 const schoolSchema = new mongoose.Schema({
-  
+    createdOn: {
+        type: String,
+        default: Date.now
+ 
+    },
     acName: {
         type: String,
         trim: true,
@@ -12,6 +16,16 @@ const schoolSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
+    pcName: {
+        type: String,
+        trim: true,
+ 
+    },
+    distName: {
+        type: String,
+        trim: true,
+    },
+
     code: {
         type: String
     },

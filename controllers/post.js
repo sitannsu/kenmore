@@ -94,7 +94,7 @@ exports.getSchools = async (req, res) => {
     const perPage = 6;
     let totalItems;
 
-    const posts = await School.find()
+    const posts = await School.find().sort({_id:-1})
         // countDocuments() gives you total count of posts
      
         .then(posts => {
