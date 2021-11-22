@@ -18,7 +18,8 @@ const {
     updateComment,
     postSearchByKeyword,
     createSchool,
-    getSchools
+    getSchools,
+    getSchoolDetails
     
 } = require('../controllers/post');
 const { requireSignin } = require('../controllers/auth');
@@ -60,6 +61,7 @@ router.get('/post/photo/:postId', photo);
 
 router.post('/addSchool', createSchool);
 router.get('/getALlschools', getSchools);
+router.get('/getSchoolDetails/:schoolId', getSchoolDetails);
 
 // any route containing :userId, our app will first execute userById()
 router.param('userId', userById);
