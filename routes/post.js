@@ -18,6 +18,9 @@ const {
     updateComment,
     postSearchByKeyword,
     createSchool,
+    getSchoolsByBlock,
+    getALlBlockByDist,
+    getALlBlockByDist2,
     getSchools,
     getSchoolDetails
     
@@ -61,6 +64,9 @@ router.get('/post/photo/:postId', photo);
 
 router.post('/addSchool', createSchool);
 router.get('/getALlschools', getSchools);
+router.get('/getALlschoolsByBlock/:blockName', getSchoolsByBlock);
+router.get('/getALlBlockByDist/:distName', getALlBlockByDist);
+router.get('/getSchoollCountInAllBlock', getALlBlockByDist2);
 router.get('/getSchoolDetails/:schoolId', getSchoolDetails);
 
 // any route containing :userId, our app will first execute userById()
