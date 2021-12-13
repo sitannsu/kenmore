@@ -6,9 +6,10 @@ const User = require('../models/user');
 const {sendNotification} = require("../utility")
 const { uploadFileTos3, uploadVideoTos3 } = require('./videoupload');
 const { LoginTicket } = require('google-auth-library');
-
+var XLSX = require('xlsx');
 const cron = require('node-cron');
 const School = require('../models/school');
+const AllSchools = require('../models/allSchools');
 const { Client } = require('@elastic/elasticsearch')
 const client = new Client({ node: 'http://localhost:9200' ,
                         maxRetries: 5,
@@ -188,6 +189,68 @@ exports.getSchoolDetails = async (req, res) => {
 };
 
 
+exports.getSchoolDistricts = async (req, res) => {
+    // get current page from req.query or use default value of 1
+    const currentPage = req.query.page || 1;
+    // return 3 posts per page
+    const perPage = 6;
+    let totalItems;
+
+    const posts = await AllSchools.find().distinct('District')
+  
+        // countDocuments() gives you total count of posts
+     
+        .then(posts => {
+            res.status(200).json(posts);
+        })
+        .catch(err => console.log(err));
+};
+
+exports.getSchoolBlocks = async (req, res) => {
+    // get current page from req.query or use default value of 1
+    const currentPage = req.query.page || 1;
+    // return 3 posts per page
+    const perPage = 6;
+    let totalItems;
+
+    const posts = await AllSchools.find({District: req.body.District }).distinct('Block')
+  
+        // countDocuments() gives you total count of posts
+     
+        .then(posts => {
+            res.status(200).json(posts);
+        })
+        .catch(err => console.log(err));
+};
+
+
+
+
+exports.createSchoolDistricts = async (req, res, next) => {
+    try{
+        console.log("reqqq", req.file);
+    // let form = new formidable.IncomingForm();
+    // form.keepExtensions = true;
+//    console.log("requset", req);
+
+        let post = new AllSchools(req.body);
+        
+        post.save((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            res.json(result);
+        });
+}
+catch(error) {
+    console.log("errror",error)
+}
+};
+
+
+
 
 
 
@@ -219,6 +282,48 @@ catch(error) {
 }
 };
 
+ 
+
+
+exports.addComments = async (req, res, next) => {
+    try{
+        console.log("reqqq", req.file);
+    // let form = new formidable.IncomingForm();
+    // form.keepExtensions = true;
+//    console.log("requset", req);
+
+        let post = new School(req.body);
+        
+        post.save((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            res.json(result);
+        });
+}
+catch(error) {
+    console.log("errror",error)
+}
+};
+
+
+
+
+exports.getComments = async (req, res) => {
+ 
+
+ 
+
+
+        var XLSX = require('xlsx');
+        var workbook = XLSX.readFile('2222.xlsx');
+        var sheet_name_list = workbook.SheetNames;
+        console.log(XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]))
+
+        res.status(200).json(workbook.Sheets[sheet_name_list[0]]);
+};
 
 
 exports.createPost = async (req, res, next) => {

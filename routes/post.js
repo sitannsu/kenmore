@@ -22,7 +22,11 @@ const {
     getALlBlockByDist,
     getALlBlockByDist2,
     getSchools,
-    getSchoolDetails
+    getSchoolDetails,
+    createSchoolDistricts,
+    getSchoolBlocks,
+    getSchoolDistricts,
+    getComments
     
 } = require('../controllers/post');
 const { requireSignin } = require('../controllers/auth');
@@ -68,6 +72,15 @@ router.get('/getALlschoolsByBlock/:blockName', getSchoolsByBlock);
 router.get('/getALlBlockByDist/:distName', getALlBlockByDist);
 router.get('/getSchoollCountInAllBlock', getALlBlockByDist2);
 router.get('/getSchoolDetails/:schoolId', getSchoolDetails);
+
+router.get('/getSchoolDistricts', getSchoolDistricts);
+router.post('/getSchoolBlocks', getSchoolBlocks);
+
+
+router.post('/createSchoolDistricts', createSchoolDistricts);
+
+//router.post('/addComments', addComments);
+router.get('/getComments', getComments);
 
 // any route containing :userId, our app will first execute userById()
 router.param('userId', userById);
