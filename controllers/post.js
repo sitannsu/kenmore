@@ -399,8 +399,8 @@ exports.userAuth = async (req, res, next) => {
             // persist the token as 't' in cookie with expiry date
             res.cookie('t', token, { expire: new Date() + 9999 });
             // retrun response with user and token to frontend client
-            const { _id, name, email, role, profileImageUrl, userType } = user;
-            return res.json({ token, user: { _id, email, name, role, profileImageUrl, userType } });
+            const { _id, email, userName, userBlock, userDistrict, userType } = user;
+            return res.json({ token, user: { _id, email, userName, userBlock, userDistrict, userType } });
         });
 
         
