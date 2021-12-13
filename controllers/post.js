@@ -1,3 +1,7 @@
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+const expressJwt = require('express-jwt');
+
 const Post = require('../models/post');
 const formidable = require('formidable');
 const fs = require('fs');
@@ -326,6 +330,77 @@ catch(error) {
     console.log("errror",error)
 }
 };
+
+
+ 
+exports.userAuth = async (req, res, next) => {
+    try{
+        console.log("reqqq", req.body);
+    // let form = new formidable.IncomingForm();
+    // form.keepExtensions = true;
+//    console.log("requset", req);
+
+    const { phone, userName, password, userrole, deviceId, firebaseToken } = req.body;
+    SchoolUser.findOne({ userName }, (err, user) => {
+            // if err or no user
+            console.log("useruser",user);
+            if (err || !user) {
+                return res.status(401).json({
+                    error: 'User with that email does not exist. Please signup.'
+                });
+            }
+            // if user is found make sure the email and password match
+            // create authenticate method in model and use here
+            console.log("autrhpasssss", password);
+            console.log("autrhpasssss", user.authenticate(password));
+            if (!user.authenticate(password)) {
+                return res.status(401).json({
+                    error: 'UserName and password do not match'
+                });
+            }
+
+            console.log("user.userroleuser.userrole", user.userrole);
+            console.log("user.userroleuser.userrole--2", userrole);
+       
+      
+
+
+            // generate a token with user id and secret
+            const token = jwt.sign({ _id: user._id, userrole: user.userType }, process.env.JWT_SECRET);
+            // persist the token as 't' in cookie with expiry date
+            res.cookie('t', token, { expire: new Date() + 9999 });
+            // retrun response with user and token to frontend client
+            const { _id, name, email, role, profileImageUrl, userType } = user;
+            return res.json({ token, user: { _id, email, name, role, profileImageUrl, userType } });
+        });
+
+        
+}
+catch(error) {
+    console.log("errror",error)
+}
+};
+
+
+
+exports.getUserList = async (req, res) => {
+    // get current page from req.query or use default value of 1
+    const currentPage = req.query.page || 1;
+    // return 3 posts per page
+    const perPage = 6;
+    let totalItems;
+
+    const posts = await SchoolUser.find()
+  
+        // countDocuments() gives you total count of posts
+     
+        .then(posts => {
+            res.status(200).json(posts);
+        })
+        .catch(err => console.log(err));
+};
+
+
 
 
 

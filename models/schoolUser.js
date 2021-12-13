@@ -23,6 +23,7 @@ const schoolUserSchema = new mongoose.Schema({
         trim: true,
  
     },
+    salt: String,
     userBlock: {
         type: String,
         trim: true,
@@ -49,6 +50,8 @@ schoolUserSchema
         this.salt = uuidv4();
         // encryptPassword()
         this.hashed_password = this.encryptPassword(password);
+        console.log("hashed_passwordhashed_password--1",password);
+   
     })
     .get(function () {
         return this._password;
@@ -61,6 +64,9 @@ schoolUserSchema.methods = {
     },
 
     encryptPassword: function (password) {
+        console.log("hashed_passwordhashed_password--1",password);
+        console.log("hashed_passwordhashed_password--222",this.salt);
+ 
          if (!password) return "";
         try {
             return crypto

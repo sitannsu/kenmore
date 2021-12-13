@@ -28,7 +28,11 @@ const {
     getSchoolListByBlock,
     getSchoolDistricts,
     createUser,
-    getComments
+    getComments,
+    getUserList,
+    userAuth
+
+    
     
 } = require('../controllers/post');
 const { requireSignin } = require('../controllers/auth');
@@ -83,6 +87,9 @@ router.post('/getSchoolListByBlock', getSchoolListByBlock);
 
 
 router.post('/createUser', createUser);
+router.get('/getUserList', getUserList);
+
+router.post('/userAuth', userAuth);
 
 router.post('/createSchoolDistricts', createSchoolDistricts);
 
