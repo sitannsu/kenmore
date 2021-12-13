@@ -28,9 +28,11 @@ const {
     getSchoolListByBlock,
     getSchoolDistricts,
     createUser,
-    getComments,
+ 
     getUserList,
-    userAuth
+    userAuth,
+    createComments,
+    getComments
 
     
     
@@ -89,12 +91,16 @@ router.post('/getSchoolListByBlock', getSchoolListByBlock);
 router.post('/createUser', createUser);
 router.get('/getUserList', getUserList);
 
+
+router.post('/createComments', createComments);
+router.get('/getComments/:schoolId', getComments);
+
 router.post('/userAuth', userAuth);
 
 router.post('/createSchoolDistricts', createSchoolDistricts);
 
 //router.post('/addComments', addComments);
-router.get('/getComments', getComments);
+//router.get('/getComments', getComments);
 
 // any route containing :userId, our app will first execute userById()
 router.param('userId', userById);

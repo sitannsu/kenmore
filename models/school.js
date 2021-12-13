@@ -52,7 +52,20 @@ const schoolSchema = new mongoose.Schema({
     }    ,
     sport: {
         type: String
-    }
+    },
+    
+    comments: [
+        {
+            comment: String,
+       
+            created: { type: Date, default: Date.now },
+            postedBy: { type: ObjectId, ref: 'User' },
+          
+    
+            likes: [ { userId:String , count: Number  }]
+        }
+    ]
+    
 });
 
 
