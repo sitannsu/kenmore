@@ -25,6 +25,7 @@ const {
     getSchoolDetails,
     createSchoolDistricts,
     getSchoolBlocks,
+    getSchoolListByBlock,
     getSchoolDistricts,
     getComments
     
@@ -75,6 +76,9 @@ router.get('/getSchoolDetails/:schoolId', getSchoolDetails);
 
 router.get('/getSchoolDistricts', getSchoolDistricts);
 router.post('/getSchoolBlocks', getSchoolBlocks);
+router.post('/getSchoolListByBlock', getSchoolListByBlock);
+
+
 
 
 router.post('/createSchoolDistricts', createSchoolDistricts);

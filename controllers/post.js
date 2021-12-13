@@ -223,6 +223,24 @@ exports.getSchoolBlocks = async (req, res) => {
         .catch(err => console.log(err));
 };
 
+exports.getSchoolListByBlock = async (req, res) => {
+    // get current page from req.query or use default value of 1
+    const currentPage = req.query.page || 1;
+    // return 3 posts per page
+    const perPage = 6;
+    let totalItems;
+
+    const posts = await AllSchools.find({Block: req.body.Block })
+  
+        // countDocuments() gives you total count of posts
+     
+        .then(posts => {
+            res.status(200).json(posts);
+        })
+        .catch(err => console.log(err));
+};
+
+
 
 
 
