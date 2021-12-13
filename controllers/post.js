@@ -10,6 +10,9 @@ var XLSX = require('xlsx');
 const cron = require('node-cron');
 const School = require('../models/school');
 const AllSchools = require('../models/allSchools');
+const SchoolUser = require('../models/schoolUser');
+
+
 const { Client } = require('@elastic/elasticsearch')
 const client = new Client({ node: 'http://localhost:9200' ,
                         maxRetries: 5,
@@ -301,6 +304,30 @@ catch(error) {
 };
 
  
+exports.createUser = async (req, res, next) => {
+    try{
+        console.log("reqqq", req.file);
+    // let form = new formidable.IncomingForm();
+    // form.keepExtensions = true;
+//    console.log("requset", req);
+
+        let post = new SchoolUser(req.body);
+        
+        post.save((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            res.json(result);
+        });
+}
+catch(error) {
+    console.log("errror",error)
+}
+};
+
+
 
 
 exports.addComments = async (req, res, next) => {

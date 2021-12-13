@@ -27,6 +27,7 @@ const {
     getSchoolBlocks,
     getSchoolListByBlock,
     getSchoolDistricts,
+    createUser,
     getComments
     
 } = require('../controllers/post');
@@ -80,6 +81,8 @@ router.post('/getSchoolListByBlock', getSchoolListByBlock);
 
 
 
+
+router.post('/createUser', createUser);
 
 router.post('/createSchoolDistricts', createSchoolDistricts);
 
