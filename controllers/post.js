@@ -150,6 +150,35 @@ exports.getALlBlockByDist2= async (req, res) => {
         .catch(err => console.log(err));
 };
 
+exports.getALlBlockByDist3= async (req, res) => {
+    // get current page from req.query or use default value of 1
+    const currentPage = req.query.page || 1;
+    // return 3 posts per page
+    const perPage = 6;
+    let totalItems;
+
+    console.log("req.params.distName",req.params.distName);
+    const posts = await AllSchools.aggregate([ 
+        {
+            $match: {District:req.params.distName}// Filter
+        },
+    {
+        
+        $group: {
+            _id: '$Block', schools: { $sum: 1 },smartClass: {$sum: "$smart_classes.physical_units" }
+            ,science_lab: {$sum: "$science_lab.physical_units" },e_library: {$sum: "$e_library.physical_units" }
+            ,sanitisation: {$sum: "$smart_classes.sanitisation" }
+        }
+    }]).sort({_id:-1})
+        // countDocuments() gives you total count of posts
+     
+        .then(posts => {
+            res.status(200).json(posts);
+        })
+        .catch(err => console.log(err));
+};
+
+
 
 exports.getALlBlockByDist = async (req, res) => {
     // get current page from req.query or use default value of 1

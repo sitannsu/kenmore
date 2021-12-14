@@ -29,7 +29,7 @@ const {
     getSchoolDistricts,
     getSchoolDistricts2,
     createUser,
- 
+    getALlBlockByDist3,
     getUserList,
     userAuth,
     createComments,
@@ -84,6 +84,7 @@ router.get('/getALlBlockByDist/:distName', getALlBlockByDist);
 router.get('/getSchoollCountInAllBlock', getALlBlockByDist2);
 router.get('/getSchoolDetails/:schoolId', getSchoolDetails);
 
+router.get('/getSchoollForADistStatitics/:distName', getALlBlockByDist3);
 router.get('/getSchoolDistricts', getSchoolDistricts);
 router.get('/getSchoolDistricts2', getSchoolDistricts2);
 router.post('/getSchoolBlocks', getSchoolBlocks);
