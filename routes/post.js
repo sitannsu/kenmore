@@ -27,6 +27,7 @@ const {
     getSchoolBlocks,
     getSchoolListByBlock,
     getSchoolDistricts,
+    getSchoolDistricts2,
     createUser,
  
     getUserList,
@@ -84,6 +85,7 @@ router.get('/getSchoollCountInAllBlock', getALlBlockByDist2);
 router.get('/getSchoolDetails/:schoolId', getSchoolDetails);
 
 router.get('/getSchoolDistricts', getSchoolDistricts);
+router.get('/getSchoolDistricts2', getSchoolDistricts2);
 router.post('/getSchoolBlocks', getSchoolBlocks);
 router.post('/getSchoolListByBlock', getSchoolListByBlock);
 

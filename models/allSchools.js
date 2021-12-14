@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 
 const AllSchoolsSchema = new mongoose.Schema({
-
-    _id: mongoose.ObjectId,
+    _id: { type: mongoose.Schema.Types.ObjectId },
 
     Sl_No: {
         type: String
@@ -41,6 +40,10 @@ const AllSchoolsSchema = new mongoose.Schema({
        HM_Contact:{
         type:String,
         default:""
+       },
+       physical_unitsSMart:{
+        type:Number,
+        default:2
        },
 
        smart_classes:{

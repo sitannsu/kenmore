@@ -215,6 +215,34 @@ exports.getSchoolDistricts = async (req, res) => {
         .catch(err => console.log(err));
 };
 
+exports.getSchoolDistricts2 = async (req, res) => {
+    // get current page from req.query or use default value of 1
+    const currentPage = req.query.page || 1;
+    // return 3 posts per page
+    const perPage = 6;
+    let totalItems;
+
+    const posts = await AllSchools.aggregate([ 
+        {
+            $group: {
+                _id: '$District', schools: { $sum: 1 },smartClass: {$sum: "$smart_classes.physical_units" }
+                ,science_lab: {$sum: "$science_lab.physical_units" },e_library: {$sum: "$e_library.physical_units" }
+                ,sanitisation: {$sum: "$smart_classes.sanitisation" }
+            }
+            
+        },
+ 
+    
+    
+    ]).sort({_id:-1})
+            // countDocuments() gives you total count of posts
+         
+            .then(posts => {
+                res.status(200).json(posts);
+            })
+            .catch(err => console.log(err));
+};
+
 exports.getSchoolBlocks = async (req, res) => {
     // get current page from req.query or use default value of 1
     const currentPage = req.query.page || 1;
@@ -395,25 +423,26 @@ exports.updateSchoolStatus = async (req, res, next) => {
  
 
 
-        AllSchools.findOne({HM_Contact:req.body.HM_Contact})
+        AllSchools.findById(req.body._id)
         // countDocuments() gives you total count of posts
      
         .then(posts => {
             console.log("postspostsposts",posts);
             console.log("postspostsposts---",req.body.type);
 
-            if(req.body.type = 0){
+            if(req.body.type == 0){
                 posts.smart_classes = req.body;
-            }else if(req.body.type = 1){
+            }else 
+             if(req.body.type == 1){
                 posts.science_lab = req.body;
-            }else   if(req.body.type = 2){
+            }else   if(req.body.type == 2){
                 posts.e_library = req.body;
-            }else   if(req.body.type = 3){
+            }else   if(req.body.type == 3){
                 posts.sanitisation = req.body;
-            }else   if(req.body.type = 4){
+            }else   if(req.body.type == 4){
                 posts.sports = req.body;
             }
-     
+            console.log("postspostsposts---2222",posts);
             posts.commentDate = Date.now();
             //res.status(200).json(posts);
             posts.save((err, result) => {
