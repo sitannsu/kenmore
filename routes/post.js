@@ -33,7 +33,8 @@ const {
     userAuth,
     createComments,
     createSubComments,
-    getComments
+    getComments,
+    updateSchoolStatus
 
     
     
@@ -97,6 +98,7 @@ router.post('/createComments', createComments);
 router.get('/getComments/:schoolId', getComments);
 
 router.put('/createSubComments', createSubComments);
+router.put('/updateSchoolStatus', updateSchoolStatus);
 
 router.post('/userAuth', userAuth);
 

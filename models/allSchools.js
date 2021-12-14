@@ -3,7 +3,7 @@ const { ObjectId } = mongoose.Schema;
 
 const AllSchoolsSchema = new mongoose.Schema({
 
-    
+    _id: mongoose.ObjectId,
 
     Sl_No: {
         type: String
@@ -41,6 +41,107 @@ const AllSchoolsSchema = new mongoose.Schema({
        HM_Contact:{
         type:String,
         default:""
+       },
+
+       smart_classes:{
+        physical_units:{
+            type:Number,
+            default:0
+           },
+           implement_agency:{
+            type:String,
+            default:""
+           },
+           deadline:{
+            type: Date,
+            default: Date.now
+           },
+           work_status:{
+            type:String,
+            default:""
+           },
+    
+       },
+
+       science_lab:{
+        physical_units:{
+            type:Number,
+            default:0
+           },
+           implement_agency:{
+            type:String,
+            default:""
+           },
+           deadline:{
+            type: Date,
+            default: Date.now
+           },
+           work_status:{
+            type:String,
+            default:""
+           },
+    
+       },
+
+
+       e_library:{
+        physical_units:{
+            type:Number,
+            default:0
+           },
+           implement_agency:{
+            type:String,
+            default:""
+           },
+           deadline:{
+            type: Date,
+            default: Date.now
+           },
+           work_status:{
+            type:String,
+            default:""
+           },
+    
+       },
+
+       sanitisation:{
+        physical_units:{
+            type:Number,
+            default:0
+           },
+           implement_agency:{
+            type:String,
+            default:""
+           },
+           deadline:{
+            type: Date,
+            default: Date.now
+           },
+           work_status:{
+            type:String,
+            default:""
+           },
+    
+       },
+
+       sports:{
+        physical_units:{
+            type:Number,
+            default:0
+           },
+           implement_agency:{
+            type:String,
+            default:""
+           },
+           deadline:{
+            type: Date,
+            default: Date.now
+           },
+           work_status:{
+            type:String,
+            default:""
+           },
+    
        },
     
 });
