@@ -6,6 +6,10 @@ const commentSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
+    commentsByName: {
+        type: String,
+       
+    },
 
     commentBy: {
         type: Object,
