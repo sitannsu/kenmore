@@ -32,6 +32,7 @@ const {
     getUserList,
     userAuth,
     createComments,
+    createSubComments,
     getComments
 
     
@@ -94,6 +95,8 @@ router.get('/getUserList', getUserList);
 
 router.post('/createComments', createComments);
 router.get('/getComments/:schoolId', getComments);
+
+router.put('/createSubComments', createSubComments);
 
 router.post('/userAuth', userAuth);
 

@@ -357,6 +357,55 @@ catch(error) {
 };
 
 
+exports.createSubComments = async (req, res, next) => {
+    try{
+        console.log("reqqq", req.body);
+    // let form = new formidable.IncomingForm();
+    // form.keepExtensions = true;
+//    console.log("requset", req);
+
+  
+
+
+/*let post = new comments(req.body);
+        
+        post.save((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            res.json(result);
+        });
+
+        */
+
+
+        comments.findById(req.body._id)
+        // countDocuments() gives you total count of posts
+     
+        .then(posts => {
+
+            posts.subComment = req.body;
+            posts.commentDate = Date.now();
+            //res.status(200).json(posts);
+            posts.save((err, result) => {
+                if (err) {
+                    return res.status(400).json({
+                        error: err
+                    });
+                }
+                res.json(result);
+            });
+        })
+        .catch(err => console.log(err));
+}
+catch(error) {
+    console.log("errror",error)
+}
+};
+
+
 
 
 

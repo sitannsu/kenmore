@@ -26,6 +26,32 @@ const commentSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+
+    subComment:{
+        comments: {
+            type: String
+        },
+        commentsByName: {
+            type: String,
+           
+        },
+    
+        commentBy: {
+            type: Object,
+            ref: "SchoolUser"
+        },
+    
+        schoolId:{
+            type:Object,
+            ref: "School"
+            
+        },
+       
+        commentDate: {
+            type: Date,
+            default: Date.now
+        },
+    }
    
 });
 
