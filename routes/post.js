@@ -36,7 +36,10 @@ const {
     createSubComments,
     getComments,
     updateSchoolStatus,
-    getSchoolsByBlock2
+    getSchoolsByBlock2,
+    getSchoolDetailsById
+
+
 
     
     
@@ -87,6 +90,7 @@ router.get('/getSchoollCountInAllBlock', getALlBlockByDist2);
 router.get('/getSchoolDetails/:schoolId', getSchoolDetails);
 
 router.get('/getSchoollForADistStatitics/:distName', getALlBlockByDist3);
+router.get('/getSchoolDetailsById/:schoolId', getSchoolDetailsById);
 router.get('/getSchoolDistricts', getSchoolDistricts);
 router.get('/getSchoolDistricts2', getSchoolDistricts2);
 router.post('/getSchoolBlocks', getSchoolBlocks);

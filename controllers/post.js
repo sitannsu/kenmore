@@ -145,6 +145,25 @@ exports.getSchoolsByBlock2 = async (req, res) => {
         .catch(err => console.log(err));
 };
 
+
+exports.getSchoolDetailsById = async (req, res) => {
+    // get current page from req.query or use default value of 1
+    const currentPage = req.query.page || 1;
+    // return 3 posts per page
+    const perPage = 6;
+    let totalItems;
+
+    const posts = await AllSchools.findById( req.params.schoolId).sort({_id:-1})
+        // countDocuments() gives you total count of posts
+     
+        .then(posts => {
+            res.status(200).json(posts);
+        })
+        .catch(err => console.log(err));
+};
+
+
+
 exports.getALlBlockByDist2= async (req, res) => {
     // get current page from req.query or use default value of 1
     const currentPage = req.query.page || 1;
