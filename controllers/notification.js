@@ -44,10 +44,12 @@ exports.saveKenmoreData = async (req, res) => {
     kenmore.save((err, result) => {
         if (err) {
             return res.status(400).json({
-                error: err
+                "status": "FAIL",
+                "responseCode": "500"
             });
         }
-        res.status(200).json(result);
+        res.status(200).json({ "status": "SUCCESS",
+        "responseCode": "200 OK"});
     });
 
      
