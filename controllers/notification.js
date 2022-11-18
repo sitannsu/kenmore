@@ -2,38 +2,56 @@ const { result } = require('lodash');
 const notification = require('../models/notification');
 const Notification = require('../models/notification');
 const User = require('../models/user');
+const Kenmore = require('../models/Kenmore');
 var mongoose = require('mongoose');
 
 
 exports.sendNotifications = async (req, res) => {
 
 
-    User.findOne({ _id: req.body.user }, (err, user)=>{
+    try{
+        console.log("reqqq", req.file);
+    // let form = new formidable.IncomingForm();
+    // form.keepExtensions = true;
+//    console.log("requset", req);
 
-        if(!user){
-            return res.status(400).json({
-                error: "User does not exist"
-            });
-        }
-
-        const notification = new Notification(req.body);
-        //console.log("useruseruseruser",user);
-        notification.user = {_id:user._id , profileImageUrl:user.profileImageUrl, firstName:user.firstName,
-             lastName:user.lastName};
-        notification.save((err, result) => {
+        let post = new AllSchools(req.body);
+        
+        post.save((err, result) => {
             if (err) {
                 return res.status(400).json({
                     error: err
                 });
             }
-            res.status(200).json(result);
+            res.json(result);
         });
-    })
+}
+catch(error) {
+    console.log("errror",error)
+}
 
 
      
 };
 
+exports.saveKenmoreData = async (req, res) => {
+
+
+
+    const kenmore = new Kenmore(req.body);
+    //console.log("useruseruseruser",user);
+  
+    kenmore.save((err, result) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            });
+        }
+        res.status(200).json(result);
+    });
+
+     
+};
 exports.getAllNotifications = async (req, res) => {
     //console.log(req.params.userId.toString());
     Notification.find({user: req.params.userId})
